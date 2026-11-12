@@ -1,0 +1,25 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=minima-plymouth-theme
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Minimalist Plymouth boot splash theme"
+arch=('any')
+url="https://github.com/koresent/minima-plymouth-theme"
+license=('GPL3')
+depends=('plymouth')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/minima-plymouth-theme/archive/refs/heads/main.tar.gz"
+)
+sha256sums=(
+    '8793d15e2bc2581b2ed49a7e2909b9230b0889314086573396a8986ff54f0542'
+)
+
+package() {
+    cd "${srcdir}/minima-plymouth-theme-main"
+    local themes_dir="${pkgdir}/usr/share/plymouth/themes/minima"
+    install -d "${themes_dir}/assets"
+    install -m 644 minima.plymouth "${themes_dir}/"
+    install -m 644 minima.script "${themes_dir}/"
+    install -m 644 assets/* "${themes_dir}/assets/"
+    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

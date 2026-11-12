@@ -1,0 +1,22 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=dot-cursors
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Minimalistic dot cursor theme for Linux (Dot-Black and Dot-White)"
+arch=('any')
+url="https://github.com/koresent/Dot-Cursors"
+license=('GPL3')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/Dot-Cursors/archive/refs/heads/main.tar.gz"
+)
+sha256sums=(
+    '5b144387c896fddca8d9b365f0ef0e0c019babcb72773dc539e92497b379bb19'
+)
+
+package() {
+    cd "${srcdir}/Dot-Cursors-main"
+    install -d "${pkgdir}/usr/share/icons"
+    cp -r Linux/Dot-Black "${pkgdir}/usr/share/icons/"
+    cp -r Linux/Dot-White "${pkgdir}/usr/share/icons/"
+    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

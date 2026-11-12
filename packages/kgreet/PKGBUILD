@@ -1,0 +1,27 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=kgreet
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Wayland greetd login greeter built with GTK4 and gtk4-layer-shell"
+arch=('x86_64')
+url="https://github.com/koresent/kgreet"
+license=('GPL3')
+depends=('glibc' 'gcc-libs' 'gtk4' 'gtk4-layer-shell')
+optdepends=(
+    'greetd: Lightweight login manager daemon'
+)
+provides=('kgreet')
+conflicts=('kgreet-bin' 'kgreet-git')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/kgreet/releases/download/nightly/kgreet-x86_64-unknown-linux-gnu.tar.gz"
+)
+sha256sums=(
+    '990850312424c5d3939c345d206c9bb87dad7606d2c82ab2b21022ae678c6d50'
+)
+
+package() {
+    install -Dm755 "${srcdir}/kgreet" "${pkgdir}/usr/bin/kgreet"
+    if [[ -f "${srcdir}/config.example.yaml" ]]; then
+        install -Dm644 "${srcdir}/config.example.yaml" "${pkgdir}/usr/share/kgreet/config.example.yaml"
+    fi
+}

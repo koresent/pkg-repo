@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=korob
+Comment=Wayland Hotkey & Cheatsheet Overlay
+Exec=korob
+Icon=korob
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=hotkey;cheatsheet;shortcuts;keyboard;
+StartupWMClass=korob
+StartupNotify=false

@@ -1,0 +1,34 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=kclip
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Wayland clipboard manager with rich TTY integration and history"
+arch=('x86_64')
+url="https://github.com/koresent/kclip"
+license=('GPL3')
+depends=('glibc' 'gcc-libs')
+optdepends=(
+    'wl-clipboard: Wayland clipboard command line utilities'
+)
+provides=('kclip')
+conflicts=('kclip-bin' 'kclip-git')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/kclip/releases/download/v${pkgver}/kclip-x86_64-unknown-linux-gnu.tar.gz"
+    "kclip.desktop"
+    "kclip.service"
+    "kclip.svg"
+)
+sha256sums=(
+    'f8a892c73496e66317347993265e02b0f0bc6efc120f5a3405fd1262f4df0ef4'
+    '0fb456079405dadb2a826e1d7e476db60d0e8c64dbae961779aa550ea81a3979'
+    '21d85371269acf171a8314dead47048f471b3a95bcc37cf91f53243f06341495'
+    'ca6a00402c48838893dde804c33ce19921b26455f56ea0af9dafb0e939d96c16'
+)
+
+package() {
+    install -Dm755 "${srcdir}/kclip" "${pkgdir}/usr/bin/kclip"
+    install -Dm644 "${srcdir}/kclip.desktop" "${pkgdir}/usr/share/applications/kclip.desktop"
+    install -Dm644 "${srcdir}/kclip.service" "${pkgdir}/usr/lib/systemd/user/kclip.service"
+    install -Dm644 "${srcdir}/kclip.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/kclip.svg"
+    install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

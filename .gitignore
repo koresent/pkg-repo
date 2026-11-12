@@ -1,0 +1,28 @@
+# Makepkg build artifacts & sources
+src/
+pkg/
+*.pkg.tar.zst
+*.pkg.tar.zst.sig
+*.pkg.tar.xz
+*.pkg.tar.gz
+*.tar.gz
+*.tar.xz
+*.part
+
+# Repository build outputs
+build/
+public/
+dist/
+
+# Python cache & environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+
+# OS / Editor temporary files
+*.log
+.DS_Store
+*.swp
+*.swo

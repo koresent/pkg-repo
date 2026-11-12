@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=kclip
+Comment=Wayland Clipboard Manager
+Exec=kclip toggle
+Icon=kclip
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=clipboard;paste;history;
+StartupNotify=false

@@ -1,0 +1,14 @@
+[Unit]
+Description=kclip Wayland Clipboard Daemon
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/kclip daemon
+Restart=on-failure
+RestartSec=1s
+Slice=app.slice
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,0 +1,25 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=vikunja.nvim
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Neovim plugin for Vikunja task management with Kanban board and floating editor"
+arch=('any')
+url="https://github.com/koresent/vikunja.nvim"
+license=('GPL3')
+depends=('neovim')
+provides=('neovim-vikunja')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/vikunja.nvim/archive/refs/heads/main.tar.gz"
+)
+sha256sums=(
+    '434cb6689752665308a50570a163a9488298d803af2071bb6cf56deaac26d6f8'
+)
+
+package() {
+    cd "${srcdir}/vikunja.nvim-main"
+    local plugin_dir="${pkgdir}/usr/share/nvim/runtime/pack/dist/opt/${pkgname}"
+    install -d "${plugin_dir}"
+    cp -r lua "${plugin_dir}/"
+    install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

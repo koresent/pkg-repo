@@ -1,0 +1,27 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=kfont
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Fast local font viewer, typography inspector, and ligature tester"
+arch=('x86_64')
+url="https://github.com/koresent/kfont"
+license=('GPL3')
+depends=('glibc' 'gcc-libs' 'gtk3' 'webkit2gtk-4.1')
+provides=('kfont')
+conflicts=('kfont-bin' 'kfont-git')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/kfont/releases/download/nightly/kfont-x86_64-unknown-linux-gnu.tar.gz"
+    "kfont.desktop"
+    "kfont.png"
+)
+sha256sums=(
+    '45b1fc690d66ffa83b68ea47fc933c80a5eaa3aaae96a08807ec973bc9607a4b'
+    'faf6611031aae0d056b9feddf3dea21e7be8f707e76d31a17361f68857da9b60'
+    'fea68976873bfbb3f40490a8ecbc0d0c23781dfdfd9d812f4d39b953d7bd8c6d'
+)
+
+package() {
+    install -Dm755 "${srcdir}/kfont" "${pkgdir}/usr/bin/kfont"
+    install -Dm644 "${srcdir}/kfont.desktop" "${pkgdir}/usr/share/applications/kfont.desktop"
+    install -Dm644 "${srcdir}/kfont.png" "${pkgdir}/usr/share/icons/hicolor/512x512/apps/kfont.png"
+}

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=kfont
+Comment=Fast local font viewer, typography inspector, and ligature tester
+Exec=kfont %U
+Icon=kfont
+Terminal=false
+Type=Application
+Categories=Graphics;Utility;
+MimeType=font/ttf;font/otf;font/woff;font/woff2;font/collection;application/x-font-ttf;application/x-font-otf;application/font-woff;application/x-font-type1;
+StartupWMClass=kfont
