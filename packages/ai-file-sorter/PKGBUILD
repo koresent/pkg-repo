@@ -1,0 +1,113 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=ai-file-sorter
+pkgver=1.9.2
+pkgrel=1
+pkgdesc="Content-aware file organization and renaming desktop application powered by local/remote LLMs"
+arch=('x86_64')
+url="https://filesorter.app"
+license=('AGPL3')
+depends=(
+    'curl'
+    'fmt'
+    'glibc'
+    'hicolor-icon-theme'
+    'jsoncpp'
+    'libmediainfo'
+    'libx11'
+    'openblas'
+    'openssl'
+    'qt6-base'
+    'sqlite'
+    'vulkan-icd-loader'
+    'zlib'
+)
+makedepends=(
+    'cmake'
+    'git'
+    'ninja'
+    'patchelf'
+    'qt6-tools'
+    'shaderc'
+    'spirv-headers'
+    'vulkan-headers'
+)
+optdepends=(
+    'vulkan-driver: GPU acceleration via Vulkan (RADV, ANV, NVK)'
+    'nvidia-utils: Proprietary NVIDIA driver with Vulkan support'
+)
+provides=('ai-file-sorter')
+conflicts=('ai-file-sorter-bin' 'ai-file-sorter-git')
+source=(
+    "${pkgname}::git+https://github.com/hyperfield/ai-file-sorter.git#tag=v${pkgver}"
+    "ai-file-sorter.desktop"
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+)
+
+prepare() {
+    cd "${srcdir}/${pkgname}"
+    git submodule update --init --recursive
+}
+
+build() {
+    cd "${srcdir}/${pkgname}"
+
+    # Build llama runtime variants (CPU with OpenBLAS + Vulkan GPU acceleration)
+    ./app/scripts/build_llama_linux.sh cuda=off vulkan=on blas=on
+
+    # Build Qt6 desktop application and storage plugins
+    make -C app -j"$(nproc)"
+}
+
+package() {
+    cd "${srcdir}/${pkgname}"
+
+    local app_dir="${pkgdir}/usr/lib/${pkgname}"
+    install -d "${app_dir}/bin"
+    install -d "${app_dir}/lib"
+    install -d "${pkgdir}/usr/bin"
+
+    # Install application binaries
+    install -m755 app/bin/aifilesorter-bin "${app_dir}/bin/aifilesorter-bin"
+    if [[ -f app/bin/aifs_onedrive_storage_plugin ]]; then
+        install -m755 app/bin/aifs_onedrive_storage_plugin "${app_dir}/bin/aifs_onedrive_storage_plugin"
+    fi
+
+    # Install precompiled llama/ggml libraries
+    if [[ -d app/lib/precompiled ]]; then
+        cp -a app/lib/precompiled "${app_dir}/lib/"
+    fi
+    if [[ -d app/lib/ggml ]]; then
+        cp -a app/lib/ggml "${app_dir}/lib/"
+    fi
+
+    # Optional root-level runtime files and certificates
+    if [[ -f app/resources/certs/cacert.pem ]]; then
+        install -Dm644 app/resources/certs/cacert.pem "${app_dir}/certs/cacert.pem"
+    fi
+
+    # Generate launcher wrapper targeting /usr/lib/ai-file-sorter
+    python3 app/scripts/gen_run_wrapper.py \
+        --mode install \
+        --install-app-dir "/usr/lib/${pkgname}" \
+        --binary "aifilesorter-bin" \
+        --template "app/scripts/run_aifilesorter.sh.in" \
+        --output "${pkgdir}/usr/bin/${pkgname}"
+    chmod 755 "${pkgdir}/usr/bin/${pkgname}"
+
+    # Desktop entry and icons
+    install -Dm644 "${srcdir}/ai-file-sorter.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+    if [[ -f app/resources/images/app_icon_256.png ]]; then
+        install -Dm644 app/resources/images/app_icon_256.png "${pkgdir}/usr/share/icons/hicolor/256x256/apps/${pkgname}.png"
+    fi
+    if [[ -f app/resources/images/app_icon_256.svg ]]; then
+        install -Dm644 app/resources/images/app_icon_256.svg "${pkgdir}/usr/share/icons/hicolor/scalable/apps/${pkgname}.svg"
+    fi
+
+    # License
+    if [[ -f LICENSE ]]; then
+        install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
+}

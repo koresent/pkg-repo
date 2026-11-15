@@ -1,0 +1,47 @@
+name: Check Upstream Releases
+
+on:
+  schedule:
+    # Run once daily at 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "check-upstream"
+  cancel-in-progress: false
+
+jobs:
+  check-releases:
+    name: Check Upstream Releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check and update release-based packages
+        run: |
+          python3 scripts/update-pkgver.py --check-upstream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet packages/; then
+            git add packages/
+            git commit -m "chore(pkg): bump upstream releases"
+            git push origin main
+          else
+            echo "All upstream release packages are up-to-date."
+          fi

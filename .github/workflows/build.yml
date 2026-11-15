@@ -36,7 +36,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pacman -Syu --noconfirm --needed git python uv sudo snappy
+          pacman -Syu --noconfirm --needed \
+            git python uv sudo snappy \
+            cmake ninja patchelf \
+            qt6-base qt6-tools \
+            curl jsoncpp sqlite openssl fmt spdlog libmediainfo openblas zlib gettext \
+            shaderc spirv-headers vulkan-headers vulkan-icd-loader
 
       - name: Update package version on dispatch
         if: github.event_name == 'repository_dispatch'

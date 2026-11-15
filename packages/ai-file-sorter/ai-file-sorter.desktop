@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=AI File Sorter
+Comment=Content-aware file organization and renaming powered by AI
+Exec=ai-file-sorter %F
+Icon=ai-file-sorter
+Terminal=false
+Type=Application
+Categories=Utility;FileTools;Qt;
+MimeType=inode/directory;
+Keywords=ai;file;sorter;organizer;rename;llm;
+StartupNotify=true
+StartupWMClass=aifilesorter
