@@ -1,19 +1,25 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=photocraft-companion
 pkgver=2.1.1
-pkgrel=2
-pkgdesc="AI-powered companion overlay and plugin ecosystem for PhotoCraft graphics editor"
+pkgrel=3
+pkgdesc="AI-powered companion overlay and plugin ecosystem for PhotoCraft graphics editor (CUDA GPU accelerated)"
 arch=('x86_64')
 url="https://github.com/kobaltgit/photocraft-companion"
 license=('MIT')
 depends=(
     'cairo'
+    'cuda'
+    'cudnn'
+    'gcc-libs'
     'gdk-pixbuf2'
     'glib2'
     'glibc'
     'gtk3'
     'hicolor-icon-theme'
     'pango'
+)
+makedepends=(
+    'cargo'
 )
 optdepends=(
     'photocraft-bin: PhotoCraft graphics editor'
@@ -22,26 +28,58 @@ optdepends=(
 )
 provides=('photocraft-companion')
 conflicts=('photocraft-companion-bin' 'photocraft-companion-git')
+options=('!lto')
 source=(
-    "${pkgname}-${pkgver}.deb::https://github.com/kobaltgit/photocraft-companion/releases/download/v${pkgver}/PhotoCraft-Companion-v${pkgver}-linux-amd64.deb"
-    "registry-${pkgver}.json::https://github.com/kobaltgit/photocraft-companion/releases/download/v${pkgver}/registry.json"
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/kobaltgit/photocraft-companion/archive/refs/tags/v${pkgver}.tar.gz"
+    "cuda-linux.patch"
+    "photocraft-companion.sh"
 )
 sha256sums=(
-    'b71334646cb83470b977b29b37257b232c85e077fe904bd7cb1e2d58ff41b054'
-    'c713dfc93461d74fcd31ebffa4cfb8566367599f55ebbf812ebea0ef75de8215'
+    'f6b8eba0df75f0d7488add9d27f5c0c36053187eac73a146b02349479abc932d'
+    '57fe98a021cfab4c6015efb88c6cf81a38432887ecabb7486b1c30c35ae8d7eb'
+    'af8bb2c1a388aa3662f7c995be0d125055c9e12b5c1bfefc44a8d651e120fc4d'
 )
 
+prepare() {
+    cd "${pkgname}-${pkgver}"
+    patch -Np1 -i "${srcdir}/cuda-linux.patch"
+}
+
+build() {
+    cd "${pkgname}-${pkgver}"
+    export CFLAGS="${CFLAGS//-flto=auto/}"
+    export CFLAGS="${CFLAGS//-flto/}"
+    export CXXFLAGS="${CXXFLAGS//-flto=auto/}"
+    export CXXFLAGS="${CXXFLAGS//-flto/}"
+    export LDFLAGS="${LDFLAGS//-flto=auto/}"
+    export LDFLAGS="${LDFLAGS//-flto/}"
+    cargo build --release --locked
+}
+
 package() {
-    bsdtar -x -f "${srcdir}/${pkgname}-${pkgver}.deb" data.tar.zst
-    bsdtar -x -f data.tar.zst -C "${pkgdir}"
+    cd "${pkgname}-${pkgver}"
 
-    install -Dm644 "${srcdir}/registry-${pkgver}.json" "${pkgdir}/usr/share/photocraft-companion/registry.json"
+    # 1. Main executable under /usr/lib/photocraft-companion/
+    install -Dm755 "target/release/${pkgname}" "${pkgdir}/usr/lib/${pkgname}/${pkgname}"
 
-    # Upstream discovery looks for adjacent plugins relative to current_exe() dir.
-    # Relocate binary under /usr/lib/photocraft-companion/ with symlinked plugins/
-    # so sync_missing_bundled_plugins() seeds user directory automatically on launch.
-    install -d "${pkgdir}/usr/lib/photocraft-companion"
-    mv "${pkgdir}/usr/bin/photocraft-companion" "${pkgdir}/usr/lib/photocraft-companion/photocraft-companion"
-    ln -s /usr/share/photocraft-companion/plugins "${pkgdir}/usr/lib/photocraft-companion/plugins"
-    ln -s /usr/lib/photocraft-companion/photocraft-companion "${pkgdir}/usr/bin/photocraft-companion"
+    # 2. Bundled ONNX Runtime provider shared libraries
+    local ort_cache="${XDG_CACHE_HOME:-$HOME/.cache}/dfbin/x86_64-unknown-linux-gnu/b89451babb9d4ec77c3f381e8ef92b640e125021b59f9cc7747e73c9fe8d549b"
+    if [[ -d "${ort_cache}" ]]; then
+        install -Dm755 "${ort_cache}"/libonnxruntime_providers_*.so -t "${pkgdir}/usr/lib/${pkgname}/"
+    fi
+
+    # 3. Environment wrapper in /usr/bin/
+    install -Dm755 "${srcdir}/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+
+    # 4. Plugins and registry in /usr/share/photocraft-companion/
+    install -d "${pkgdir}/usr/share/${pkgname}"
+    cp -r plugins "${pkgdir}/usr/share/${pkgname}/"
+    install -Dm644 web/public/registry.json "${pkgdir}/usr/share/${pkgname}/registry.json"
+
+    # 5. Symlink plugins adjacent to binary for portable/exe-relative discovery
+    ln -s "/usr/share/${pkgname}/plugins" "${pkgdir}/usr/lib/${pkgname}/plugins"
+
+    # 6. Desktop integration and icon
+    install -Dm644 packaging/linux/photocraft-companion.desktop "${pkgdir}/usr/share/applications/photocraft-companion.desktop"
+    install -Dm644 assets/icon.svg "${pkgdir}/usr/share/icons/hicolor/scalable/apps/photocraft-companion.svg"
 }

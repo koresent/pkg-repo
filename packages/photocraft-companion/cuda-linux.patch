@@ -1,0 +1,71 @@
+diff --git a/crates/ai_engine/Cargo.toml b/crates/ai_engine/Cargo.toml
+index 9437666..e0da8bb 100644
+--- a/crates/ai_engine/Cargo.toml
++++ b/crates/ai_engine/Cargo.toml
+@@ -18,5 +18,8 @@ serde_json = { workspace = true }
+ [target.'cfg(windows)'.dependencies]
+ ort = { workspace = true, features = ["directml"] }
+ 
+-[target.'cfg(not(windows))'.dependencies]
++[target.'cfg(target_os = "linux")'.dependencies]
++ort = { workspace = true, features = ["cuda"] }
++
++[target.'cfg(target_os = "macos")'.dependencies]
+ ort = { workspace = true }
+diff --git a/crates/ai_engine/src/engine.rs b/crates/ai_engine/src/engine.rs
+index 52c849c..b0aac2d 100644
+--- a/crates/ai_engine/src/engine.rs
++++ b/crates/ai_engine/src/engine.rs
+@@ -180,7 +180,33 @@ impl AiEngine {
+                 .map_err(|e| CompanionError::AiEngine(format!("CPU provider error: {e}")))?
+         };
+ 
+-        #[cfg(not(windows))]
++        #[cfg(target_os = "linux")]
++        let mut builder = if !_is_cpu_only {
++            match builder.with_execution_providers([
++                ort::ep::CUDA::default().build(),
++                ort::ep::CPU::default().build(),
++            ]) {
++                Ok(b) => {
++                    tracing::info!("Configured CUDA + CPU execution provider");
++                    b
++                }
++                Err(e) => {
++                    tracing::warn!("CUDA provider setup failed ({e}), falling back to CPU");
++                    Session::builder()
++                        .map_err(|e| {
++                            CompanionError::AiEngine(format!("Failed to re-init builder: {e}"))
++                        })?
++                        .with_execution_providers([ort::ep::CPU::default().build()])
++                        .map_err(|e| CompanionError::AiEngine(format!("CPU provider error: {e}")))?
++                }
++            }
++        } else {
++            builder
++                .with_execution_providers([ort::ep::CPU::default().build()])
++                .map_err(|e| CompanionError::AiEngine(format!("CPU provider error: {e}")))?
++        };
++
++        #[cfg(target_os = "macos")]
+         let mut builder = builder
+             .with_execution_providers([ort::ep::CPU::default().build()])
+             .map_err(|e| CompanionError::AiEngine(format!("CPU provider error: {e}")))?;
+diff --git a/crates/companion_app/src/discovery.rs b/crates/companion_app/src/discovery.rs
+index 946d8df..9b6a0cd 100644
+--- a/crates/companion_app/src/discovery.rs
++++ b/crates/companion_app/src/discovery.rs
+@@ -54,6 +54,13 @@ pub fn find_plugins_dir() -> PathBuf {
+         }
+     }
+ 
++    if bundled_plugins.is_none() {
++        let system_share = PathBuf::from("/usr/share/photocraft-companion/plugins");
++        if system_share.is_dir() {
++            bundled_plugins = Some(system_share);
++        }
++    }
++
+     if let Some(bundled) = bundled_plugins {
+         // If bundled directory is writable, use it directly (portable mode)
+         if core_contracts::is_dir_writable(&bundled) {
