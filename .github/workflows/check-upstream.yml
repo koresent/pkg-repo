@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: "check-upstream"
@@ -42,6 +43,7 @@ jobs:
             git add packages/
             git commit -m "chore(pkg): bump upstream releases"
             git push origin main
+            gh workflow run build.yml --ref main
           else
             echo "All upstream release packages are up-to-date."
           fi

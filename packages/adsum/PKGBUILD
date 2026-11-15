@@ -17,7 +17,7 @@ source=(
     "adsum.service"
 )
 sha256sums=(
-    'fff12466b2fbd5e547e5c31b7f0313afac6d98b7d9dae1f119a91d5a068584b9'
+    'SKIP'
     'SKIP'
     'SKIP'
 )

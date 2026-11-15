@@ -48,21 +48,33 @@ def get_latest_release(repo: str) -> str:
     if token:
         headers["Authorization"] = f"token {token}"
 
-    url = f"https://api.github.com/repos/{repo}/releases/latest"
+    url = f"https://api.github.com/repos/{repo}/releases?per_page=10"
     req = urllib.request.Request(url, headers=headers)
+    tag = ""
     try:
         with urllib.request.urlopen(req) as resp:
             data = json.loads(resp.read().decode())
-            tag = data.get("tag_name", "")
+            for r in data:
+                candidate = r.get("tag_name", "")
+                if not r.get("draft") and not r.get("prerelease") and not re.search(r"-(rc|alpha|beta|preview|dev)", candidate, re.I):
+                    tag = candidate
+                    break
     except urllib.error.HTTPError as e:
-        if e.code == 404:
-            tags_url = f"https://api.github.com/repos/{repo}/tags?per_page=1"
-            req_tags = urllib.request.Request(tags_url, headers=headers)
-            with urllib.request.urlopen(req_tags) as resp:
-                data = json.loads(resp.read().decode())
-                tag = data[0]["name"] if data else ""
-        else:
+        if e.code != 404:
             raise
+
+    if not tag:
+        tags_url = f"https://api.github.com/repos/{repo}/tags?per_page=10"
+        req_tags = urllib.request.Request(tags_url, headers=headers)
+        with urllib.request.urlopen(req_tags) as resp:
+            data = json.loads(resp.read().decode())
+            for r in data:
+                candidate = r.get("name", "")
+                if not re.search(r"-(rc|alpha|beta|preview|dev)", candidate, re.I):
+                    tag = candidate
+                    break
+            if not tag and data:
+                tag = data[0]["name"]
 
     cleaned_ver = re.sub(r"^v", "", tag.strip())
     return cleaned_ver
