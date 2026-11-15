@@ -28,7 +28,7 @@ optdepends=(
 )
 provides=('photocraft-companion')
 conflicts=('photocraft-companion-bin' 'photocraft-companion-git')
-options=('!lto')
+options=('!lto' '!debug')
 source=(
     "${pkgname}-${pkgver}.tar.gz::https://github.com/kobaltgit/photocraft-companion/archive/refs/tags/v${pkgver}.tar.gz"
     "cuda-linux.patch"
@@ -63,9 +63,12 @@ package() {
     install -Dm755 "target/release/${pkgname}" "${pkgdir}/usr/lib/${pkgname}/${pkgname}"
 
     # 2. Bundled ONNX Runtime provider shared libraries
-    local ort_cache="${XDG_CACHE_HOME:-$HOME/.cache}/dfbin/x86_64-unknown-linux-gnu/b89451babb9d4ec77c3f381e8ef92b640e125021b59f9cc7747e73c9fe8d549b"
-    if [[ -d "${ort_cache}" ]]; then
-        install -Dm755 "${ort_cache}"/libonnxruntime_providers_*.so -t "${pkgdir}/usr/lib/${pkgname}/"
+    local ort_provider_so
+    ort_provider_so="$(find "${XDG_CACHE_HOME:-$HOME/.cache}" "target/release" -name "libonnxruntime_providers_cuda.so" 2>/dev/null | head -n1 || true)"
+    if [[ -n "${ort_provider_so}" ]]; then
+        local ort_dir
+        ort_dir="$(dirname "${ort_provider_so}")"
+        install -Dm755 "${ort_dir}"/libonnxruntime_providers_*.so -t "${pkgdir}/usr/lib/${pkgname}/"
     fi
 
     # 3. Environment wrapper in /usr/bin/

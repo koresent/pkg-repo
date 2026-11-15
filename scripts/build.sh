@@ -33,17 +33,36 @@ for pkg_dir in "${ROOT_DIR}"/packages/*; do
     
     (
         cd "${pkg_dir}"
-        expected_pkg=""
+        expected_pkgs=()
         if command -v makepkg >/dev/null 2>&1; then
-            expected_pkg="$(basename "$(makepkg --packagelist 2>/dev/null | head -n1 || true)")"
+            mapfile -t expected_pkgs < <(makepkg --packagelist 2>/dev/null || true)
         fi
 
-        if [[ -n "${expected_pkg}" && -f "${ARCH_DIR}/${expected_pkg}" && "${FORCE_REBUILD}" != "1" ]]; then
-            echo "-> Already present in ${ARCH_DIR}: ${expected_pkg}"
-        elif [[ -n "${expected_pkg}" && "${FORCE_REBUILD}" != "1" ]] && curl -sfI "${REMOTE_REPO_URL}/${expected_pkg}" >/dev/null 2>&1; then
-            echo "-> Fetching prebuilt ${expected_pkg} from ${REMOTE_REPO_URL}..."
-            curl -sfL "${REMOTE_REPO_URL}/${expected_pkg}" -o "${ARCH_DIR}/${expected_pkg}"
-        else
+        all_present=1
+        for pkg_path in "${expected_pkgs[@]}"; do
+            [[ -z "${pkg_path}" ]] && continue
+            pkg_file="$(basename "${pkg_path}")"
+            if [[ -f "${ARCH_DIR}/${pkg_file}" && "${FORCE_REBUILD}" != "1" ]]; then
+                echo "-> Already present in ${ARCH_DIR}: ${pkg_file}"
+                continue
+            elif [[ "${FORCE_REBUILD}" != "1" ]]; then
+                echo "-> Fetching prebuilt ${pkg_file} from ${REMOTE_REPO_URL}..."
+                if curl -sfL "${REMOTE_REPO_URL}/${pkg_file}" -o "${ARCH_DIR}/${pkg_file}.part" 2>/dev/null; then
+                    mv -f "${ARCH_DIR}/${pkg_file}.part" "${ARCH_DIR}/${pkg_file}"
+                    echo "-> Successfully fetched ${pkg_file}"
+                else
+                    rm -f "${ARCH_DIR}/${pkg_file}.part"
+                    echo "-> Prebuilt package ${pkg_file} unavailable, fallback to build"
+                    all_present=0
+                    break
+                fi
+            else
+                all_present=0
+                break
+            fi
+        done
+
+        if [[ ${all_present} -eq 0 || ${#expected_pkgs[@]} -eq 0 ]]; then
             echo "-> Building ${pkg_name}..."
             makepkg "${MAKEPKG_FLAGS[@]}"
             mv -f ./*.pkg.tar.zst "${ARCH_DIR}/"

@@ -42,7 +42,8 @@ jobs:
             qt6-base qt6-tools \
             rust \
             curl jsoncpp sqlite openssl fmt spdlog libmediainfo openblas zlib gettext \
-            shaderc spirv-headers vulkan-headers vulkan-icd-loader
+            shaderc spirv-headers vulkan-headers vulkan-icd-loader \
+            gtk3 cairo
 
       - name: Update package version on dispatch
         if: github.event_name == 'repository_dispatch'
@@ -86,4 +87,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        continue-on-error: true
