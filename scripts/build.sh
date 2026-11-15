@@ -17,10 +17,7 @@ if [[ $EUID -eq 0 ]]; then
     exec sudo -u builder --preserve-env=REPO_NAME,ARCH bash "$0" "$@"
 fi
 
-MAKEPKG_FLAGS=("-f" "--noconfirm")
-if [[ "${CI:-}" == "true" ]]; then
-    MAKEPKG_FLAGS=("-s" "${MAKEPKG_FLAGS[@]}")
-fi
+MAKEPKG_FLAGS=("-f" "--noconfirm" "-d")
 
 echo "Building Pacman repository: [${REPO_NAME}] for ${ARCH}"
 mkdir -p "${ARCH_DIR}"
