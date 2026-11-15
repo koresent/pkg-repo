@@ -150,19 +150,6 @@ def generate_html():
       font-weight: 700;
       letter-spacing: -0.02em;
       margin-bottom: 0.35rem;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.65rem;
-    }}
-    .repo-badge {{
-      background: var(--bg3);
-      color: var(--aqua);
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 0.15rem 0.55rem;
-      border-radius: 4px;
-      letter-spacing: 0.02em;
     }}
     p.subtitle {{
       color: var(--fg-dim);
@@ -377,11 +364,8 @@ def generate_html():
 <body>
   <div class="container">
     <header>
-      <h1>
-        <span>cachy.koresent.dev</span>
-        <span class="repo-badge">CachyOS</span>
-      </h1>
-      <p class="subtitle">Personal binary repository for Arch Linux / CachyOS.</p>
+      <h1>cachy.koresent.dev</h1>
+      <p class="subtitle">Personal binary repository for CachyOS.</p>
     </header>
 
     <div class="card">
