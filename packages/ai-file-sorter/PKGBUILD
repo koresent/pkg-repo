@@ -54,11 +54,31 @@ prepare() {
 build() {
     cd "${srcdir}/${pkgname}"
 
+    export PATH="/usr/lib/qt6:/usr/lib/qt6/bin:${PATH}"
+
+    if [[ -z "${RCC:-}" ]]; then
+        for candidate in /usr/lib/qt6/rcc /usr/lib/qt6/libexec/rcc /usr/bin/qt6-rcc /usr/bin/rcc; do
+            if [[ -x "$candidate" ]]; then
+                export RCC="$candidate"
+                break
+            fi
+        done
+    fi
+
+    if [[ -z "${LRELEASE:-}" ]]; then
+        for candidate in /usr/lib/qt6/bin/lrelease /usr/lib/qt6/lrelease /usr/lib/qt6/libexec/lrelease /usr/bin/lrelease6 /usr/bin/lrelease; do
+            if [[ -x "$candidate" ]]; then
+                export LRELEASE="$candidate"
+                break
+            fi
+        done
+    fi
+
     # Build llama runtime variants (CPU with OpenBLAS + Vulkan GPU acceleration)
     ./app/scripts/build_llama_linux.sh cuda=off vulkan=on blas=on
 
     # Build Qt6 desktop application and storage plugins
-    make -C app -j"$(nproc)"
+    make -C app RCC="${RCC:-/usr/lib/qt6/rcc}" ${LRELEASE:+LRELEASE="${LRELEASE}"} -j"$(nproc)"
 }
 
 package() {
