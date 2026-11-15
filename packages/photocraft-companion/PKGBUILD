@@ -1,0 +1,39 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=photocraft-companion
+pkgver=2.1.1
+pkgrel=1
+pkgdesc="AI-powered companion overlay and plugin ecosystem for PhotoCraft graphics editor"
+arch=('x86_64')
+url="https://github.com/kobaltgit/photocraft-companion"
+license=('MIT')
+depends=(
+    'cairo'
+    'gdk-pixbuf2'
+    'glib2'
+    'glibc'
+    'gtk3'
+    'hicolor-icon-theme'
+    'pango'
+)
+optdepends=(
+    'photocraft-bin: PhotoCraft graphics editor'
+    'wl-clipboard: Wayland clipboard support'
+    'xclip: X11 clipboard support'
+)
+provides=('photocraft-companion')
+conflicts=('photocraft-companion-bin' 'photocraft-companion-git')
+source=(
+    "${pkgname}-${pkgver}.deb::https://github.com/kobaltgit/photocraft-companion/releases/download/v${pkgver}/PhotoCraft-Companion-v${pkgver}-linux-amd64.deb"
+    "registry-${pkgver}.json::https://github.com/kobaltgit/photocraft-companion/releases/download/v${pkgver}/registry.json"
+)
+sha256sums=(
+    'b71334646cb83470b977b29b37257b232c85e077fe904bd7cb1e2d58ff41b054'
+    'c713dfc93461d74fcd31ebffa4cfb8566367599f55ebbf812ebea0ef75de8215'
+)
+
+package() {
+    bsdtar -x -f "${srcdir}/${pkgname}-${pkgver}.deb" data.tar.zst
+    bsdtar -x -f data.tar.zst -C "${pkgdir}"
+
+    install -Dm644 "${srcdir}/registry-${pkgver}.json" "${pkgdir}/usr/share/photocraft-companion/registry.json"
+}
