@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cachy.koresent.dev &bull; CachyOS Repository</title>
+  <style>
+    :root {
+      --bg0: #282828;
+      --bg1: #32302f;
+      --bg2: #3c3836;
+      --bg3: #504945;
+      --code-bg: #1d2021;
+      --fg: #ebdbb2;
+      --fg-dim: #a89984;
+      --yellow: #fabd2f;
+      --green: #b8bb26;
+      --blue: #83a598;
+      --aqua: #8ec07c;
+      --orange: #fe8019;
+      --border: #443e3b;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg0);
+      color: var(--fg);
+      font-family: var(--font-sans);
+      line-height: 1.55;
+      padding: 2.5rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.25rem;
+    }
+    h1 {
+      color: var(--yellow);
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+    .repo-badge {
+      background: var(--bg3);
+      color: var(--aqua);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+    }
+    p.subtitle {
+      color: var(--fg-dim);
+      font-size: 0.95rem;
+    }
+    .card {
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+    .card h2 {
+      color: var(--green);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.85rem;
+    }
+    p.hint {
+      color: var(--fg-dim);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    p.hint-sub {
+      color: var(--fg-dim);
+      font-size: 0.9rem;
+      margin: 1rem 0 0.5rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      overflow-x: auto;
+      margin: 0;
+      line-height: 1.45;
+    }
+    pre code {
+      background: transparent !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--fg);
+      display: block;
+      white-space: pre;
+    }
+    :not(pre) > code {
+      background: var(--bg2);
+      color: var(--orange);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+    }
+    .code-comment { color: var(--fg-dim); }
+    .code-section { color: var(--yellow); font-weight: 600; }
+    .code-key { color: var(--blue); }
+    .code-val { color: var(--green); }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    th, td {
+      padding: 0.75rem 0.85rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      color: var(--yellow);
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .pkg-title {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .pkg-title:hover {
+      color: var(--aqua);
+      text-decoration: underline;
+    }
+    .desc-col {
+      color: var(--fg);
+    }
+    .size-col {
+      white-space: nowrap;
+    }
+    .badge {
+      background: var(--bg2);
+      color: var(--yellow);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .action-col {
+      text-align: right;
+      width: 60px;
+    }
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--bg2);
+      color: var(--fg);
+      text-decoration: none;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .dl-btn:hover {
+      background: var(--green);
+      color: var(--bg0);
+      border-color: var(--green);
+    }
+    .status-building {
+      color: var(--fg-dim);
+      font-size: 0.8rem;
+      font-style: italic;
+    }
+
+    .mobile-cards {
+      display: none;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .pkg-card {
+      background: var(--bg0);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+    }
+    .pkg-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.35rem;
+    }
+    .pkg-card-desc {
+      color: var(--fg);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .pkg-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .pkg-card-meta {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .meta-size {
+      color: var(--fg-dim);
+    }
+    .pkg-card-action .dl-btn {
+      width: 40px;
+      height: 40px;
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      color: var(--fg-dim);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.25rem;
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1.25rem 0.75rem;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+      .card {
+        padding: 1rem;
+      }
+      .table-container {
+        display: none;
+      }
+      .mobile-cards {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>
+        <span>cachy.koresent.dev</span>
+        <span class="repo-badge">CachyOS</span>
+      </h1>
+      <p class="subtitle">Personal binary repository for Arch Linux / CachyOS.</p>
+    </header>
+
+    <div class="card">
+      <h2>Configuration</h2>
+      <p class="hint">Append the repository block to <code>/etc/pacman.conf</code>:</p>
+      <pre><code><span class="code-section">[koresent]</span>
+<span class="code-key">SigLevel</span> = <span class="code-val">Optional TrustAll</span>
+<span class="code-key">Server</span> = <span class="code-val">https://cachy.koresent.dev/$arch</span></code></pre>
+      <p class="hint-sub">Synchronize package databases and install target packages:</p>
+      <pre><code>sudo pacman -Syu
+sudo pacman -S kclip kfont kgreet klock korob snap-hud sweep</code></pre>
+    </div>
+
+    <div class="card">
+      <h2>Packages (12)</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Package</th>
+              <th>Version</th>
+              <th>Description</th>
+              <th>Arch</th>
+              <th>Size</th>
+              <th class="action-col"></th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/browser-toolkit" target="_blank" rel="noopener">browser-toolkit</a></td>
+          <td><span class="badge">0.1.0.r33.gac69f7a-1</span></td>
+          <td class="desc-col">Auditing, testing, and fixing toolkit for UserStyles and UserScripts using Zen Browser profile</td>
+          <td><code>any</code></td>
+          <td class="size-col"><code>40.9 MB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/browser-toolkit-0.1.0.r33.gac69f7a-1-any.pkg.tar.zst" download="browser-toolkit-0.1.0.r33.gac69f7a-1-any.pkg.tar.zst" title="Download browser-toolkit (40.9 MB)" aria-label="Download browser-toolkit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/Dot-Cursors" target="_blank" rel="noopener">dot-cursors</a></td>
+          <td><span class="badge">1.0.0-1</span></td>
+          <td class="desc-col">Minimalistic dot cursor theme for Linux (Dot-Black and Dot-White)</td>
+          <td><code>any</code></td>
+          <td class="size-col"><code>53.7 KB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/dot-cursors-1.0.0-1-any.pkg.tar.zst" download="dot-cursors-1.0.0-1-any.pkg.tar.zst" title="Download dot-cursors (53.7 KB)" aria-label="Download dot-cursors"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/kclip" target="_blank" rel="noopener">kclip</a></td>
+          <td><span class="badge">0.1.0.r5.g1c0e8a6-1</span></td>
+          <td class="desc-col">Wayland clipboard manager with rich TTY integration and history</td>
+          <td><code>x86_64</code></td>
+          <td class="size-col"><code>4.1 KB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/kclip-debug-0.1.0.r5.g1c0e8a6-1-x86_64.pkg.tar.zst" download="kclip-debug-0.1.0.r5.g1c0e8a6-1-x86_64.pkg.tar.zst" title="Download kclip (4.1 KB)" aria-label="Download kclip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/kfont" target="_blank" rel="noopener">kfont</a></td>
+          <td><span class="badge">0.1.0.r2.g535a032-1</span></td>
+          <td class="desc-col">Fast local font viewer, typography inspector, and ligature tester</td>
+          <td><code>x86_64</code></td>
+          <td class="size-col"><code>2.6 MB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/kfont-0.1.0.r2.g535a032-1-x86_64.pkg.tar.zst" download="kfont-0.1.0.r2.g535a032-1-x86_64.pkg.tar.zst" title="Download kfont (2.6 MB)" aria-label="Download kfont"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/kgreet" target="_blank" rel="noopener">kgreet</a></td>
+          <td><span class="badge">0.1.0.r11.gd86e052-1</span></td>
+          <td class="desc-col">Wayland greetd login greeter built with GTK4 and gtk4-layer-shell</td>
+          <td><code>x86_64</code></td>
+          <td class="size-col"><code>4.1 KB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/kgreet-debug-0.1.0.r11.gd86e052-1-x86_64.pkg.tar.zst" download="kgreet-debug-0.1.0.r11.gd86e052-1-x86_64.pkg.tar.zst" title="Download kgreet (4.1 KB)" aria-label="Download kgreet"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/klock" target="_blank" rel="noopener">klock</a></td>
+          <td><span class="badge">0.1.0.r20.g9641631-1</span></td>
+          <td class="desc-col">Wayland session lockscreen matching kgreet styling</td>
+          <td><code>x86_64</code></td>
+          <td class="size-col"><code>1.4 MB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/klock-0.1.0.r20.g9641631-1-x86_64.pkg.tar.zst" download="klock-0.1.0.r20.g9641631-1-x86_64.pkg.tar.zst" title="Download klock (1.4 MB)" aria-label="Download klock"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/korob" target="_blank" rel="noopener">korob</a></td>
+          <td><span class="badge">0.1.0.r2.g492353d-1</span></td>
+          <td class="desc-col">Wayland Hotkey & Cheatsheet Overlay</td>
+          <td><code>x86_64</code></td>
+          <td class="size-col"><code>2.8 MB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/korob-0.1.0.r2.g492353d-1-x86_64.pkg.tar.zst" download="korob-0.1.0.r2.g492353d-1-x86_64.pkg.tar.zst" title="Download korob (2.8 MB)" aria-label="Download korob"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/Acly/krita-ai-diffusion" target="_blank" rel="noopener">krita-ai-diffusion</a></td>
+          <td><span class="badge">1.54.0_pre-1</span></td>
+          <td class="desc-col">Generative AI plugin for Krita (Stable Diffusion, inpainting, upscaling)</td>
+          <td><code>any</code></td>
+          <td class="size-col"><code>2.5 MB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/krita-ai-diffusion-1.54.0_pre-1-any.pkg.tar.zst" download="krita-ai-diffusion-1.54.0_pre-1-any.pkg.tar.zst" title="Download krita-ai-diffusion (2.5 MB)" aria-label="Download krita-ai-diffusion"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/minima-plymouth-theme" target="_blank" rel="noopener">minima-plymouth-theme</a></td>
+          <td><span class="badge">1.0.0-1</span></td>
+          <td class="desc-col">Minimalist Plymouth boot splash theme</td>
+          <td><code>any</code></td>
+          <td class="size-col"><code>75.1 KB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/minima-plymouth-theme-1.0.0-1-any.pkg.tar.zst" download="minima-plymouth-theme-1.0.0-1-any.pkg.tar.zst" title="Download minima-plymouth-theme (75.1 KB)" aria-label="Download minima-plymouth-theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/snap-hud" target="_blank" rel="noopener">snap-hud</a></td>
+          <td><span class="badge">0.1.0.r3.g9d02f58-1</span></td>
+          <td class="desc-col">Wayland window snapping HUD overlay</td>
+          <td><code>x86_64</code></td>
+          <td class="size-col"><code>4.1 KB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/snap-hud-debug-0.1.0.r3.g9d02f58-1-x86_64.pkg.tar.zst" download="snap-hud-debug-0.1.0.r3.g9d02f58-1-x86_64.pkg.tar.zst" title="Download snap-hud (4.1 KB)" aria-label="Download snap-hud"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/sweep" target="_blank" rel="noopener">sweep</a></td>
+          <td><span class="badge">0.1.0.r3.g79e4695-1</span></td>
+          <td class="desc-col">Non-destructive cache, temp, and build artifact cleaner with process guards</td>
+          <td><code>x86_64</code></td>
+          <td class="size-col"><code>4.1 KB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/sweep-debug-0.1.0.r3.g79e4695-1-x86_64.pkg.tar.zst" download="sweep-debug-0.1.0.r3.g79e4695-1-x86_64.pkg.tar.zst" title="Download sweep (4.1 KB)" aria-label="Download sweep"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+        <tr>
+          <td><a class="pkg-title" href="https://github.com/koresent/vikunja.nvim" target="_blank" rel="noopener">vikunja.nvim</a></td>
+          <td><span class="badge">0.1.0-1</span></td>
+          <td class="desc-col">Neovim plugin for Vikunja task management with Kanban board and floating editor</td>
+          <td><code>any</code></td>
+          <td class="size-col"><code>29.9 KB</code></td>
+          <td class="action-col"><a class="dl-btn" href="x86_64/vikunja.nvim-0.1.0-1-any.pkg.tar.zst" download="vikunja.nvim-0.1.0-1-any.pkg.tar.zst" title="Download vikunja.nvim (29.9 KB)" aria-label="Download vikunja.nvim"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mobile-cards">
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/browser-toolkit" target="_blank" rel="noopener">browser-toolkit</a>
+            <span class="badge">0.1.0.r33.gac69f7a-1</span>
+          </div>
+          <p class="pkg-card-desc">Auditing, testing, and fixing toolkit for UserStyles and UserScripts using Zen Browser profile</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>any</code>
+              <code class="meta-size">40.9 MB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/browser-toolkit-0.1.0.r33.gac69f7a-1-any.pkg.tar.zst" download="browser-toolkit-0.1.0.r33.gac69f7a-1-any.pkg.tar.zst" title="Download browser-toolkit (40.9 MB)" aria-label="Download browser-toolkit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/Dot-Cursors" target="_blank" rel="noopener">dot-cursors</a>
+            <span class="badge">1.0.0-1</span>
+          </div>
+          <p class="pkg-card-desc">Minimalistic dot cursor theme for Linux (Dot-Black and Dot-White)</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>any</code>
+              <code class="meta-size">53.7 KB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/dot-cursors-1.0.0-1-any.pkg.tar.zst" download="dot-cursors-1.0.0-1-any.pkg.tar.zst" title="Download dot-cursors (53.7 KB)" aria-label="Download dot-cursors"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/kclip" target="_blank" rel="noopener">kclip</a>
+            <span class="badge">0.1.0.r5.g1c0e8a6-1</span>
+          </div>
+          <p class="pkg-card-desc">Wayland clipboard manager with rich TTY integration and history</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>x86_64</code>
+              <code class="meta-size">4.1 KB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/kclip-debug-0.1.0.r5.g1c0e8a6-1-x86_64.pkg.tar.zst" download="kclip-debug-0.1.0.r5.g1c0e8a6-1-x86_64.pkg.tar.zst" title="Download kclip (4.1 KB)" aria-label="Download kclip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/kfont" target="_blank" rel="noopener">kfont</a>
+            <span class="badge">0.1.0.r2.g535a032-1</span>
+          </div>
+          <p class="pkg-card-desc">Fast local font viewer, typography inspector, and ligature tester</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>x86_64</code>
+              <code class="meta-size">2.6 MB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/kfont-0.1.0.r2.g535a032-1-x86_64.pkg.tar.zst" download="kfont-0.1.0.r2.g535a032-1-x86_64.pkg.tar.zst" title="Download kfont (2.6 MB)" aria-label="Download kfont"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/kgreet" target="_blank" rel="noopener">kgreet</a>
+            <span class="badge">0.1.0.r11.gd86e052-1</span>
+          </div>
+          <p class="pkg-card-desc">Wayland greetd login greeter built with GTK4 and gtk4-layer-shell</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>x86_64</code>
+              <code class="meta-size">4.1 KB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/kgreet-debug-0.1.0.r11.gd86e052-1-x86_64.pkg.tar.zst" download="kgreet-debug-0.1.0.r11.gd86e052-1-x86_64.pkg.tar.zst" title="Download kgreet (4.1 KB)" aria-label="Download kgreet"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/klock" target="_blank" rel="noopener">klock</a>
+            <span class="badge">0.1.0.r20.g9641631-1</span>
+          </div>
+          <p class="pkg-card-desc">Wayland session lockscreen matching kgreet styling</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>x86_64</code>
+              <code class="meta-size">1.4 MB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/klock-0.1.0.r20.g9641631-1-x86_64.pkg.tar.zst" download="klock-0.1.0.r20.g9641631-1-x86_64.pkg.tar.zst" title="Download klock (1.4 MB)" aria-label="Download klock"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/korob" target="_blank" rel="noopener">korob</a>
+            <span class="badge">0.1.0.r2.g492353d-1</span>
+          </div>
+          <p class="pkg-card-desc">Wayland Hotkey & Cheatsheet Overlay</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>x86_64</code>
+              <code class="meta-size">2.8 MB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/korob-0.1.0.r2.g492353d-1-x86_64.pkg.tar.zst" download="korob-0.1.0.r2.g492353d-1-x86_64.pkg.tar.zst" title="Download korob (2.8 MB)" aria-label="Download korob"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/Acly/krita-ai-diffusion" target="_blank" rel="noopener">krita-ai-diffusion</a>
+            <span class="badge">1.54.0_pre-1</span>
+          </div>
+          <p class="pkg-card-desc">Generative AI plugin for Krita (Stable Diffusion, inpainting, upscaling)</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>any</code>
+              <code class="meta-size">2.5 MB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/krita-ai-diffusion-1.54.0_pre-1-any.pkg.tar.zst" download="krita-ai-diffusion-1.54.0_pre-1-any.pkg.tar.zst" title="Download krita-ai-diffusion (2.5 MB)" aria-label="Download krita-ai-diffusion"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/minima-plymouth-theme" target="_blank" rel="noopener">minima-plymouth-theme</a>
+            <span class="badge">1.0.0-1</span>
+          </div>
+          <p class="pkg-card-desc">Minimalist Plymouth boot splash theme</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>any</code>
+              <code class="meta-size">75.1 KB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/minima-plymouth-theme-1.0.0-1-any.pkg.tar.zst" download="minima-plymouth-theme-1.0.0-1-any.pkg.tar.zst" title="Download minima-plymouth-theme (75.1 KB)" aria-label="Download minima-plymouth-theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/snap-hud" target="_blank" rel="noopener">snap-hud</a>
+            <span class="badge">0.1.0.r3.g9d02f58-1</span>
+          </div>
+          <p class="pkg-card-desc">Wayland window snapping HUD overlay</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>x86_64</code>
+              <code class="meta-size">4.1 KB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/snap-hud-debug-0.1.0.r3.g9d02f58-1-x86_64.pkg.tar.zst" download="snap-hud-debug-0.1.0.r3.g9d02f58-1-x86_64.pkg.tar.zst" title="Download snap-hud (4.1 KB)" aria-label="Download snap-hud"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/sweep" target="_blank" rel="noopener">sweep</a>
+            <span class="badge">0.1.0.r3.g79e4695-1</span>
+          </div>
+          <p class="pkg-card-desc">Non-destructive cache, temp, and build artifact cleaner with process guards</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>x86_64</code>
+              <code class="meta-size">4.1 KB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/sweep-debug-0.1.0.r3.g79e4695-1-x86_64.pkg.tar.zst" download="sweep-debug-0.1.0.r3.g79e4695-1-x86_64.pkg.tar.zst" title="Download sweep (4.1 KB)" aria-label="Download sweep"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-card-header">
+            <a class="pkg-title" href="https://github.com/koresent/vikunja.nvim" target="_blank" rel="noopener">vikunja.nvim</a>
+            <span class="badge">0.1.0-1</span>
+          </div>
+          <p class="pkg-card-desc">Neovim plugin for Vikunja task management with Kanban board and floating editor</p>
+          <div class="pkg-card-footer">
+            <div class="pkg-card-meta">
+              <code>any</code>
+              <code class="meta-size">29.9 KB</code>
+            </div>
+            <div class="pkg-card-action">
+              <a class="dl-btn" href="x86_64/vikunja.nvim-0.1.0-1-any.pkg.tar.zst" download="vikunja.nvim-0.1.0-1-any.pkg.tar.zst" title="Download vikunja.nvim (29.9 KB)" aria-label="Download vikunja.nvim"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Repository generated on 2026-11-15 01:28 UTC &bull; Hosted on <a href="https://github.com/koresent/pkg-repo" target="_blank" rel="noopener">GitHub</a>
+    </footer>
+  </div>
+</body>
+</html>
