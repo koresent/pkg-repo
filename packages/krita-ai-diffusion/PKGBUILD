@@ -1,0 +1,26 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=krita-ai-diffusion
+pkgver=1.54.0_pre
+pkgrel=1
+pkgdesc="Generative AI plugin for Krita (Stable Diffusion, inpainting, upscaling)"
+arch=('any')
+url="https://github.com/Acly/krita-ai-diffusion"
+license=('GPL3')
+depends=('krita' 'python-pyqt6')
+provides=('krita-ai-diffusion')
+conflicts=('krita-ai-diffusion-git')
+source=(
+    "https://github.com/Acly/krita-ai-diffusion/releases/download/v1.54.0-pre/krita_ai_diffusion-1.54.0-pre.zip"
+)
+sha256sums=(
+    'b32b6fb38f2418b5acc766340529aa5a73e00a681a84525159a87be6b57f9a73'
+)
+
+package() {
+    install -d "${pkgdir}/usr/share/krita/pykrita"
+    cp -r "${srcdir}/ai_diffusion" "${srcdir}/ai_diffusion.desktop" "${pkgdir}/usr/share/krita/pykrita/"
+
+    if [[ -f "${srcdir}/ai_diffusion/ai_diffusion.action" ]]; then
+        install -Dm644 "${srcdir}/ai_diffusion/ai_diffusion.action" "${pkgdir}/usr/share/krita/actions/ai_diffusion.action"
+    fi
+}

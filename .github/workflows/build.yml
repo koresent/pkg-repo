@@ -8,6 +8,9 @@ on:
       - 'packages/**'
       - 'scripts/**'
       - '.github/workflows/**'
+  repository_dispatch:
+    types:
+      - package-updated
   workflow_dispatch:
 
 permissions:
@@ -28,10 +31,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install dependencies
         run: |
           pacman -Syu --noconfirm --needed git python uv sudo
+
+      - name: Update package version on dispatch
+        if: github.event_name == 'repository_dispatch'
+        run: |
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          python3 scripts/update-pkgver.py --package "${{ github.event.client_payload.package }}" --commit "${{ github.event.client_payload.commit }}"
+          if ! git diff --quiet packages/; then
+            git add packages/
+            git commit -m "chore(pkg): update ${{ github.event.client_payload.package }} pkgver [skip ci]"
+            git push origin main
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run repository builder
         run: |

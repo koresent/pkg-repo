@@ -1,0 +1,24 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=sweep
+pkgver=0.1.0.r3.g79e4695
+pkgrel=1
+pkgdesc="Non-destructive cache, temp, and build artifact cleaner with process guards"
+arch=('x86_64')
+url="https://github.com/koresent/sweep"
+license=('GPL3')
+depends=('glibc' 'gcc-libs')
+provides=('sweep')
+conflicts=('sweep-bin' 'sweep-git')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/sweep/releases/download/nightly/sweep-x86_64-unknown-linux-gnu.tar.gz"
+)
+sha256sums=(
+    'SKIP'
+)
+
+package() {
+    install -Dm755 "${srcdir}/sweep" "${pkgdir}/usr/bin/sweep"
+    if [[ -f "${srcdir}/LICENSE" ]]; then
+        install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
+}

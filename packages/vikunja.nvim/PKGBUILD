@@ -8,18 +8,23 @@ url="https://github.com/koresent/vikunja.nvim"
 license=('GPL3')
 depends=('neovim')
 provides=('neovim-vikunja')
+_commit=4d30aeb861265ce845c7e42c6ba8cb77e8502cd5
 source=(
-    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/vikunja.nvim/archive/refs/heads/main.tar.gz"
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/vikunja.nvim/archive/${_commit}.tar.gz"
 )
 sha256sums=(
-    '434cb6689752665308a50570a163a9488298d803af2071bb6cf56deaac26d6f8'
+    '30f7b9b4fe910caa9aa99e0d0a260faaebdf141c282b4037edce49d1214679ff'
 )
 
 package() {
-    cd "${srcdir}/vikunja.nvim-main"
+    cd "${srcdir}/vikunja.nvim-${_commit}"
     local plugin_dir="${pkgdir}/usr/share/nvim/runtime/pack/dist/opt/${pkgname}"
     install -d "${plugin_dir}"
     cp -r lua "${plugin_dir}/"
-    install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
-    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    if [[ -f README.md ]]; then
+        install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+    fi
+    if [[ -f LICENSE ]]; then
+        install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
 }

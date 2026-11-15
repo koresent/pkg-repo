@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=kfont
-pkgver=0.1.0
+pkgver=0.1.0.r2.g535a032
 pkgrel=1
 pkgdesc="Fast local font viewer, typography inspector, and ligature tester"
 arch=('x86_64')
@@ -15,13 +15,16 @@ source=(
     "kfont.png"
 )
 sha256sums=(
-    '45b1fc690d66ffa83b68ea47fc933c80a5eaa3aaae96a08807ec973bc9607a4b'
-    'faf6611031aae0d056b9feddf3dea21e7be8f707e76d31a17361f68857da9b60'
-    'fea68976873bfbb3f40490a8ecbc0d0c23781dfdfd9d812f4d39b953d7bd8c6d'
+    'SKIP'
+    'SKIP'
+    'SKIP'
 )
 
 package() {
     install -Dm755 "${srcdir}/kfont" "${pkgdir}/usr/bin/kfont"
     install -Dm644 "${srcdir}/kfont.desktop" "${pkgdir}/usr/share/applications/kfont.desktop"
     install -Dm644 "${srcdir}/kfont.png" "${pkgdir}/usr/share/icons/hicolor/512x512/apps/kfont.png"
+    if [[ -f "${srcdir}/LICENSE" ]]; then
+        install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
 }

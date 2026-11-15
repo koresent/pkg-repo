@@ -1,15 +1,12 @@
 # koresent / pkg-repo
 
-Personal CachyOS binary package repository, automatically built and deployed via **GitHub Actions** and hosted on **GitHub Pages**.
+Personal CachyOS/Arch Linux binary package repository built with GitHub Actions and hosted on GitHub Pages.
 
-Live packages & status: **[cachy.koresent.dev](https://cachy.koresent.dev)**
+Live package index: [cachy.koresent.dev](https://cachy.koresent.dev)
 
----
+## Repository Configuration
 
-## 📦 Using the Repository
-
-### 1. Add Repository to Pacman
-Append the following section to `/etc/pacman.conf` (or via your dotfiles manager / chezmoi):
+Add the repository block to `/etc/pacman.conf`:
 
 ```ini
 [koresent]
@@ -17,45 +14,41 @@ SigLevel = Optional TrustAll
 Server = https://cachy.koresent.dev/$arch
 ```
 
-### 2. Sync and Install
+Synchronize databases and install packages:
+
 ```bash
 sudo pacman -Syu
 sudo pacman -S <package-name>
 ```
 
----
-
-## 🛠️ How to Add a New Package
+## Adding Packages
 
 1. Create a directory under `packages/<package-name>/`.
-2. Add a standard Arch/CachyOS `PKGBUILD` and any bundled assets (`.desktop`, icons, `.service`):
-   ```text
-   packages/
-   └── my-tool/
-       ├── PKGBUILD
-       ├── my-tool.desktop
-       └── my-tool.svg
-   ```
-3. Commit and push to the `main` branch:
+2. Add a standard `PKGBUILD` and optional assets (`.desktop`, icons, systemd units, PAM configs).
+3. Commit and push to `main`:
    ```bash
-   git add packages/my-tool
-   git commit -m "feat: add my-tool package"
+   git add packages/<package-name>
+   git commit -m "feat(pkg): add <package-name>"
    git push origin main
    ```
-4. **GitHub Actions** will automatically:
-   - Build the package in a clean Arch Linux container (`makepkg`).
-   - Add it to `koresent.db.tar.gz` using `repo-add`.
-   - Update `index.html`.
-   - Deploy everything to **GitHub Pages**.
+4. GitHub Actions builds the package, updates `koresent.db.tar.gz`, regenerates `index.html`, and deploys to GitHub Pages.
 
----
+## Automation and Nightly Builds
 
-## 💻 Local Testing & Building
+Release pipelines in upstream repositories dispatch a `package-updated` event via the GitHub API upon publishing a release. The repository builder workflow catches this event, increments the package version (`0.1.0.r<count>.g<sha>`), and redeploys the repository.
 
-You can build the entire repository locally at any time:
+To sync all package versions manually:
+
+```bash
+python3 scripts/update-pkgver.py --all
+```
+
+## Local Builds
+
+Build all packages and package database locally:
 
 ```bash
 ./scripts/build.sh
 ```
 
-All built `.pkg.tar.zst` packages, the database, and `index.html` will be placed in `public/`.
+All built `.pkg.tar.zst` packages, the database, and `index.html` are placed in `public/`.

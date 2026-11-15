@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Generate a sleek Gruvbox-themed index.html for the Pacman repository.
-Optimized for modern desktop and mobile displays.
-"""
 import glob
 import os
 import re
@@ -21,7 +17,7 @@ def parse_pkgbuild(pkgbuild_path):
         return info
     with open(pkgbuild_path, "r", encoding="utf-8", errors="ignore") as f:
         content = f.read()
-    
+
     for key in ["pkgname", "pkgver", "pkgrel", "pkgdesc", "url"]:
         match = re.search(rf'^{key}=["\']?([^"\'\n]+)["\']?', content, re.MULTILINE)
         if match:
@@ -65,9 +61,7 @@ def generate_html():
     packages = get_packages()
     now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
-    # Table rows for desktop
     rows_html = ""
-    # Cards for mobile
     cards_html = ""
 
     for p in packages:
@@ -78,7 +72,7 @@ def generate_html():
                 f'{DOWNLOAD_ICON_SVG}</a>'
             )
         else:
-            download_btn = '<span class="status-building">Building...</span>'
+            download_btn = '<span class="status-building">Pending build</span>'
 
         rows_html += f"""        <tr>
           <td><a class="pkg-title" href="{p['url']}" target="_blank" rel="noopener">{p['name']}</a></td>
@@ -231,7 +225,6 @@ def generate_html():
     .code-key {{ color: var(--blue); }}
     .code-val {{ color: var(--green); }}
 
-    /* Desktop Table */
     .table-container {{
       width: 100%;
       overflow-x: auto;
@@ -309,7 +302,6 @@ def generate_html():
       font-style: italic;
     }}
 
-    /* Mobile Packages View */
     .mobile-cards {{
       display: none;
       flex-direction: column;
@@ -363,7 +355,6 @@ def generate_html():
     footer a {{ color: var(--blue); text-decoration: none; }}
     footer a:hover {{ text-decoration: underline; }}
 
-    /* Responsive Breakpoints */
     @media (max-width: 640px) {{
       body {{
         padding: 1.25rem 0.75rem;
@@ -390,22 +381,22 @@ def generate_html():
         <span>cachy.koresent.dev</span>
         <span class="repo-badge">CachyOS</span>
       </h1>
-      <p class="subtitle">Personal Pacman package repository.</p>
+      <p class="subtitle">Personal binary repository for Arch Linux / CachyOS.</p>
     </header>
 
     <div class="card">
-      <h2>Setup</h2>
-      <p class="hint">Add the following lines to the end of your <code>/etc/pacman.conf</code>:</p>
+      <h2>Configuration</h2>
+      <p class="hint">Append the repository block to <code>/etc/pacman.conf</code>:</p>
       <pre><code><span class="code-section">[{REPO_NAME}]</span>
 <span class="code-key">SigLevel</span> = <span class="code-val">Optional TrustAll</span>
 <span class="code-key">Server</span> = <span class="code-val">https://cachy.koresent.dev/$arch</span></code></pre>
-      <p class="hint-sub">Then sync the repository and install packages:</p>
+      <p class="hint-sub">Synchronize package databases and install target packages:</p>
       <pre><code>sudo pacman -Syu
-sudo pacman -S kclip korob</code></pre>
+sudo pacman -S kclip kfont kgreet klock korob snap-hud sweep</code></pre>
     </div>
 
     <div class="card">
-      <h2>Available Packages ({len(packages)})</h2>
+      <h2>Packages ({len(packages)})</h2>
       <div class="table-container">
         <table>
           <thead>

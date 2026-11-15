@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=korob
-pkgver=0.1.0
+pkgver=0.1.0.r2.g492353d
 pkgrel=1
 pkgdesc="Wayland Hotkey & Cheatsheet Overlay"
 arch=('x86_64')
@@ -17,11 +17,11 @@ source=(
     "korob-512.png"
 )
 sha256sums=(
-    '2a91339eeb048a5639acfd808b2c3686594b3e5ff613bf7ad3cea80031b5487a'
-    'afb90215cced96d5e7fb15c52857991ad5fcaafa0c99175e1ca9ce46c7ba071a'
-    'ba9252ab028ea7febf6d4fbed670778dbf423022790165a67334d84494ff6e83'
-    '85cfb5a6df5e43781e320e58686d572df76f8d48d8f3dc2fb8c82d821e2f4ada'
-    '524572dea05e6383eb3d6d71e4a9d5414870c66304590005b499fd3abacbd69c'
+    'SKIP'
+    'SKIP'
+    'SKIP'
+    'SKIP'
+    'SKIP'
 )
 
 package() {
@@ -30,4 +30,7 @@ package() {
     install -Dm644 "${srcdir}/korob-128.png" "${pkgdir}/usr/share/icons/hicolor/128x128/apps/korob.png"
     install -Dm644 "${srcdir}/korob-256.png" "${pkgdir}/usr/share/icons/hicolor/256x256/apps/korob.png"
     install -Dm644 "${srcdir}/korob-512.png" "${pkgdir}/usr/share/icons/hicolor/512x512/apps/korob.png"
+    if [[ -f "${srcdir}/LICENSE" ]]; then
+        install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
 }

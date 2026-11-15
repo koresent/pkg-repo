@@ -7,19 +7,22 @@ arch=('any')
 url="https://github.com/koresent/minima-plymouth-theme"
 license=('GPL3')
 depends=('plymouth')
+_commit=2c8483dd37a7f092efa5b737cb2b8914a9c561b4
 source=(
-    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/minima-plymouth-theme/archive/refs/heads/main.tar.gz"
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/minima-plymouth-theme/archive/${_commit}.tar.gz"
 )
 sha256sums=(
-    '8793d15e2bc2581b2ed49a7e2909b9230b0889314086573396a8986ff54f0542'
+    '768e3fcc8db58210f3387404eaa94e2735add360dec236a8cce59db72a8f774d'
 )
 
 package() {
-    cd "${srcdir}/minima-plymouth-theme-main"
+    cd "${srcdir}/minima-plymouth-theme-${_commit}"
     local themes_dir="${pkgdir}/usr/share/plymouth/themes/minima"
     install -d "${themes_dir}/assets"
     install -m 644 minima.plymouth "${themes_dir}/"
     install -m 644 minima.script "${themes_dir}/"
     install -m 644 assets/* "${themes_dir}/assets/"
-    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    if [[ -f LICENSE ]]; then
+        install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
 }

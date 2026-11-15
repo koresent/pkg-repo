@@ -6,17 +6,20 @@ pkgdesc="Minimalistic dot cursor theme for Linux (Dot-Black and Dot-White)"
 arch=('any')
 url="https://github.com/koresent/Dot-Cursors"
 license=('GPL3')
+_commit=8c02c295fedcc254836959f6556ec11060fa7b87
 source=(
-    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/Dot-Cursors/archive/refs/heads/main.tar.gz"
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/Dot-Cursors/archive/${_commit}.tar.gz"
 )
 sha256sums=(
-    '5b144387c896fddca8d9b365f0ef0e0c019babcb72773dc539e92497b379bb19'
+    '5da51f1af61750c0076111efcbec4e717d07c8904f8955c5d3649ddfe99cd33a'
 )
 
 package() {
-    cd "${srcdir}/Dot-Cursors-main"
+    cd "${srcdir}/Dot-Cursors-${_commit}"
     install -d "${pkgdir}/usr/share/icons"
     cp -r Linux/Dot-Black "${pkgdir}/usr/share/icons/"
     cp -r Linux/Dot-White "${pkgdir}/usr/share/icons/"
-    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    if [[ -f LICENSE ]]; then
+        install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
 }

@@ -1,0 +1,27 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=klock
+pkgver=0.1.0.r20.g9641631
+pkgrel=1
+pkgdesc="Wayland session lockscreen matching kgreet styling"
+arch=('x86_64')
+url="https://github.com/koresent/klock"
+license=('GPL3')
+depends=('glibc' 'gcc-libs' 'pam')
+provides=('klock')
+conflicts=('klock-bin' 'klock-git')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/klock/releases/download/nightly/klock-x86_64-unknown-linux-gnu.tar.gz"
+    "klock.pam"
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+)
+
+package() {
+    install -Dm755 "${srcdir}/klock" "${pkgdir}/usr/bin/klock"
+    install -Dm644 "${srcdir}/klock.pam" "${pkgdir}/etc/pam.d/klock"
+    if [[ -f "${srcdir}/config.example.yaml" ]]; then
+        install -Dm644 "${srcdir}/config.example.yaml" "${pkgdir}/usr/share/klock/config.example.yaml"
+    fi
+}

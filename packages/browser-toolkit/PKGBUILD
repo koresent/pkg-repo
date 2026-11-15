@@ -1,27 +1,27 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=browser-toolkit
-pkgver=0.1.0
+pkgver=0.1.0.r33.gac69f7a
 pkgrel=1
 pkgdesc="Auditing, testing, and fixing toolkit for UserStyles and UserScripts using Zen Browser profile"
 arch=('any')
 url="https://github.com/koresent/browser-toolkit"
 license=('GPL3')
 depends=('python')
-makedepends=('uv')
+makedepends=('git' 'uv')
+provides=('browser-toolkit')
 source=(
-    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/browser-toolkit/archive/refs/heads/main.tar.gz"
+    "${pkgname}::git+https://github.com/koresent/browser-toolkit.git#branch=main"
 )
 sha256sums=(
-    '0404c480cbada4f0b14d9e385859f01c93789f3bcaab200468511682461bce26'
+    'SKIP'
 )
 
 package() {
-    cd "${srcdir}/browser-toolkit-main"
+    cd "${srcdir}/browser-toolkit"
     local venv_dir="${pkgdir}/usr/lib/${pkgname}"
     uv venv --python /usr/bin/python "${venv_dir}"
     uv pip install --python "${venv_dir}/bin/python" .
 
-    # Fix shebangs in venv/bin to point to live system
     if [[ -d "${venv_dir}/bin" ]]; then
         sed -i "s|${pkgdir}||g" "${venv_dir}/bin/"* 2>/dev/null || true
     fi
@@ -34,5 +34,7 @@ EOF
     chmod 755 "${pkgdir}/usr/bin/browser-toolkit"
     ln -s browser-toolkit "${pkgdir}/usr/bin/browser-auditor"
 
-    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    if [[ -f LICENSE ]]; then
+        install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
 }
