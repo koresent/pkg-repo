@@ -1,7 +1,7 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=photocraft-companion
 pkgver=2.1.1
-pkgrel=3
+pkgrel=4
 pkgdesc="AI-powered companion overlay and plugin ecosystem for PhotoCraft graphics editor (CUDA GPU accelerated)"
 arch=('x86_64')
 url="https://github.com/kobaltgit/photocraft-companion"
@@ -36,7 +36,7 @@ source=(
 )
 sha256sums=(
     'f6b8eba0df75f0d7488add9d27f5c0c36053187eac73a146b02349479abc932d'
-    '57fe98a021cfab4c6015efb88c6cf81a38432887ecabb7486b1c30c35ae8d7eb'
+    '8f562c12ef1a6da64707c39dd47b7aeaab17a32cd5bd916e44e379ef35b2f741'
     'af8bb2c1a388aa3662f7c995be0d125055c9e12b5c1bfefc44a8d651e120fc4d'
 )
 
