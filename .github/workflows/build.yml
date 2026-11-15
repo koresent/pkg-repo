@@ -36,7 +36,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pacman -Syu --noconfirm --needed git python uv sudo
+          pacman -Syu --noconfirm --needed git python uv sudo snappy
 
       - name: Update package version on dispatch
         if: github.event_name == 'repository_dispatch'
