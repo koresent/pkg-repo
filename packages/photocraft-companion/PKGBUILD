@@ -1,7 +1,7 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=photocraft-companion
 pkgver=2.1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="AI-powered companion overlay and plugin ecosystem for PhotoCraft graphics editor"
 arch=('x86_64')
 url="https://github.com/kobaltgit/photocraft-companion"
@@ -36,4 +36,12 @@ package() {
     bsdtar -x -f data.tar.zst -C "${pkgdir}"
 
     install -Dm644 "${srcdir}/registry-${pkgver}.json" "${pkgdir}/usr/share/photocraft-companion/registry.json"
+
+    # Upstream discovery looks for adjacent plugins relative to current_exe() dir.
+    # Relocate binary under /usr/lib/photocraft-companion/ with symlinked plugins/
+    # so sync_missing_bundled_plugins() seeds user directory automatically on launch.
+    install -d "${pkgdir}/usr/lib/photocraft-companion"
+    mv "${pkgdir}/usr/bin/photocraft-companion" "${pkgdir}/usr/lib/photocraft-companion/photocraft-companion"
+    ln -s /usr/share/photocraft-companion/plugins "${pkgdir}/usr/lib/photocraft-companion/plugins"
+    ln -s /usr/lib/photocraft-companion/photocraft-companion "${pkgdir}/usr/bin/photocraft-companion"
 }
