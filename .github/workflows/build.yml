@@ -40,6 +40,7 @@ jobs:
             git python uv sudo snappy \
             cmake ninja patchelf \
             qt6-base qt6-tools \
+            rust \
             curl jsoncpp sqlite openssl fmt spdlog libmediainfo openblas zlib gettext \
             shaderc spirv-headers vulkan-headers vulkan-icd-loader
 

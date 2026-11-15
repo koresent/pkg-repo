@@ -1,0 +1,43 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=adsum
+pkgver=0.40.0
+pkgrel=1
+pkgdesc="Discord Rich Presence bridge (arrpc-compatible) with universal browser origin support"
+arch=('x86_64')
+url="https://github.com/yiesko/adsum"
+license=('MIT')
+options=('!lto')
+depends=('glibc' 'gcc-libs')
+makedepends=('cargo')
+provides=('adsum')
+conflicts=('adsum-bin' 'adsum-git')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/yiesko/adsum/archive/refs/tags/v${pkgver}.tar.gz"
+    "adsum-allow-browser-origins.patch"
+    "adsum.service"
+)
+sha256sums=(
+    'fff12466b2fbd5e547e5c31b7f0313afac6d98b7d9dae1f119a91d5a068584b9'
+    'SKIP'
+    'SKIP'
+)
+
+prepare() {
+    cd "${srcdir}/Adsum-${pkgver}"
+    patch -p1 < "${srcdir}/adsum-allow-browser-origins.patch"
+}
+
+build() {
+    cd "${srcdir}/Adsum-${pkgver}"
+    export CARGO_TARGET_DIR=target
+    cargo build --release -p adsum-cli
+}
+
+package() {
+    cd "${srcdir}/Adsum-${pkgver}"
+    install -Dm755 "target/release/adsum" "${pkgdir}/usr/bin/adsum"
+    install -Dm644 "${srcdir}/adsum.service" "${pkgdir}/usr/lib/systemd/user/adsum.service"
+    if [[ -f LICENSE ]]; then
+        install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
+}

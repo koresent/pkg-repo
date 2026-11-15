@@ -19,6 +19,7 @@ REPO_MAP = {
 }
 
 RELEASE_MAP = {
+    "adsum": "yiesko/adsum",
     "ai-file-sorter": "hyperfield/ai-file-sorter",
     "photocraft-companion": "kobaltgit/photocraft-companion",
 }
