@@ -6,6 +6,7 @@ pkgdesc="Content-aware file organization and renaming desktop application powere
 arch=('x86_64')
 url="https://filesorter.app"
 license=('AGPL3')
+options=('!debug')
 depends=(
     'curl'
     'fmt'
