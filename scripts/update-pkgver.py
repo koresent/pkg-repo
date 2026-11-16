@@ -22,6 +22,7 @@ RELEASE_MAP = {
     "adsum": "yiesko/adsum",
     "ai-file-sorter": "hyperfield/ai-file-sorter",
     "photocraft-companion": "kobaltgit/photocraft-companion",
+    "sqlit": "Maxteabag/sqlit",
 }
 
 def get_repo_commit_info(repo: str, explicit_commit: str = None) -> tuple[int, str]:
