@@ -376,7 +376,7 @@ def generate_html():
 <span class="code-key">Server</span> = <span class="code-val">https://cachy.koresent.dev/$arch</span></code></pre>
       <p class="hint-sub">Synchronize package databases and install target packages:</p>
       <pre><code>sudo pacman -Syu
-sudo pacman -S kclip kfont kgreet klock korob snap-hud sweep</code></pre>
+sudo pacman -S kclip kfont kgreet klock korob sweep</code></pre>
     </div>
 
     <div class="card">
