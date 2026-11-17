@@ -1,0 +1,33 @@
+# Maintainer: koresent <https://github.com/koresent>
+# Contributor: frakod <frakod@pm.me>
+
+pkgname='smooth-scroll-linux-git'
+pkgver=r111.ef3b89f
+pkgrel=1
+pkgdesc='A lightweight tool to enhance mouse wheel scrolling, adding inertia and high-resolution precision for buttery-smooth navigation on Linux desktops.'
+arch=('x86_64')
+url='https://github.com/Wayne6530/smooth-scroll-linux'
+license=('MIT')
+depends=('spdlog' 'libevdev')
+makedepends=('cmake' 'git')
+provides=('smooth-scroll-linux')
+conflicts=('smooth-scroll-linux')
+options=('!debug')
+source=("$pkgname::git+$url")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "$srcdir/$pkgname"
+  cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+  cmake --build build --config Release
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install "$srcdir/$pkgname/build"
+  install -Dm644 "$srcdir/$pkgname/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE" 2>/dev/null || true
+}

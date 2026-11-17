@@ -43,7 +43,11 @@ jobs:
             rust \
             curl jsoncpp sqlite openssl fmt spdlog libmediainfo openblas zlib gettext \
             shaderc spirv-headers vulkan-headers vulkan-icd-loader \
-            gtk3 cairo
+            gtk3 cairo \
+            meson pkgconf wayland-protocols wayland wlroots0.20 \
+            nlohmann-json tomlplusplus libei libdisplay-info libinput \
+            libpipewire sdbus-cpp stb libevdev gtk4 acl attr jemalloc \
+            xcb-util-wm xorg-xwayland gdk-pixbuf2 pango harfbuzz perl
 
       - name: Update package version on dispatch
         if: github.event_name == 'repository_dispatch'

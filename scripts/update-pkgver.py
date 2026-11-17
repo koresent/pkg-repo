@@ -15,6 +15,9 @@ REPO_MAP = {
     "korob": "koresent/korob",
     "sweep": "koresent/sweep",
     "browser-toolkit": "koresent/browser-toolkit",
+    "umbriel-git": "noctalia-dev/umbriel",
+    "xdg-desktop-portal-umbriel-git": "noctalia-dev/xdg-desktop-portal-umbriel",
+    "smooth-scroll-linux-git": "Wayne6530/smooth-scroll-linux",
 }
 
 RELEASE_MAP = {
@@ -22,6 +25,8 @@ RELEASE_MAP = {
     "ai-file-sorter": "hyperfield/ai-file-sorter",
     "photocraft-companion": "kobaltgit/photocraft-companion",
     "sqlit": "Maxteabag/sqlit",
+    "shpool": "shell-pool/shpool",
+    "ripdrag": "nik012003/ripdrag",
 }
 
 def get_repo_commit_info(repo: str, explicit_commit: str = None) -> tuple[int, str]:
@@ -105,8 +110,16 @@ def update_package(pkg: str, explicit_commit: str = None) -> bool:
         return False
 
     current_ver = match_ver.group(1).strip()
-    base_ver = current_ver.split(".r")[0]
-    new_ver = f"{base_ver}.r{count}.g{short_sha}"
+    if current_ver.startswith("r") and "." in current_ver:
+        new_ver = f"r{count}.{short_sha}"
+    elif ".r" in current_ver:
+        base_ver = current_ver.split(".r")[0]
+        if ".g" in current_ver:
+            new_ver = f"{base_ver}.r{count}.g{short_sha}"
+        else:
+            new_ver = f"{base_ver}.r{count}.{short_sha}"
+    else:
+        new_ver = f"{current_ver}.r{count}.g{short_sha}"
 
     if current_ver == new_ver:
         print(f"{pkg}: up-to-date ({current_ver})")

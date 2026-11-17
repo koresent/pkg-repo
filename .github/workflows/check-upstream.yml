@@ -29,9 +29,9 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Check and update release-based packages
+      - name: Check and update upstream packages
         run: |
-          python3 scripts/update-pkgver.py --check-upstream
+          python3 scripts/update-pkgver.py --all
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
