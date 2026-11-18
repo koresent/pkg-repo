@@ -1,0 +1,34 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=kshot
+pkgver=0.1.0.r15.g4ce7bac
+pkgrel=1
+pkgdesc="Native Wayland screenshot and annotation utility with interactive crop, pin, and editing suite"
+arch=('x86_64')
+url="https://github.com/koresent/kshot"
+license=('GPL3')
+depends=('glibc' 'gcc-libs')
+optdepends=(
+    'grim: Screen capture fallback when compositor protocols are unavailable'
+    'wl-clipboard: Wayland clipboard command line utilities'
+)
+provides=('kshot')
+conflicts=('kshot-bin' 'kshot-git')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/kshot/releases/download/nightly/kshot-x86_64-unknown-linux-gnu.tar.gz"
+    "kshot.desktop"
+    "kshot.svg"
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+    'SKIP'
+)
+
+package() {
+    install -Dm755 "${srcdir}/kshot" "${pkgdir}/usr/bin/kshot"
+    install -Dm644 "${srcdir}/kshot.desktop" "${pkgdir}/usr/share/applications/kshot.desktop"
+    install -Dm644 "${srcdir}/kshot.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/kshot.svg"
+    if [[ -f "${srcdir}/LICENSE" ]]; then
+        install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
+}

@@ -13,6 +13,7 @@ REPO_MAP = {
     "kgreet": "koresent/kgreet",
     "klock": "koresent/klock",
     "korob": "koresent/korob",
+    "kshot": "koresent/kshot",
     "streamdeck": "koresent/streamdeck",
     "sweep": "koresent/sweep",
     "browser-toolkit": "koresent/browser-toolkit",

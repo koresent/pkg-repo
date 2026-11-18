@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#32302f"/>
+      <stop offset="100%" stop-color="#1d2021"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b8bb26"/>
+      <stop offset="100%" stop-color="#98971a"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fabd2f"/>
+      <stop offset="100%" stop-color="#fe8019"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Base squircle -->
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="url(#bg)" stroke="#504945" stroke-width="8"/>
+
+  <!-- Crop brackets / Selection corners -->
+  <!-- Top-left -->
+  <path d="M 96 176 L 96 128 C 96 110.3 110.3 96 128 96 L 176 96" fill="none" stroke="url(#accent)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Top-right -->
+  <path d="M 336 96 L 384 96 C 401.7 96 416 110.3 416 128 L 416 176" fill="none" stroke="url(#accent)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bottom-left -->
+  <path d="M 96 336 L 96 384 C 96 401.7 110.3 416 128 416 L 176 416" fill="none" stroke="url(#accent)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bottom-right -->
+  <path d="M 336 416 L 384 416 C 401.7 416 416 401.7 416 384 L 416 336" fill="none" stroke="url(#accent)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Center lens / Aperture ring -->
+  <circle cx="256" cy="256" r="84" fill="#282828" stroke="#ebdbb2" stroke-width="16"/>
+  <circle cx="256" cy="256" r="48" fill="url(#lens)"/>
+
+  <!-- Shutter reflection / crosshair dot -->
+  <circle cx="274" cy="238" r="14" fill="#fbf1c7" opacity="0.85"/>
+</svg>
