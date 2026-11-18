@@ -4,18 +4,19 @@ pkgver=1.0.0
 pkgrel=1
 pkgdesc="Minimalistic dot cursor theme for Linux (Dot-Black and Dot-White)"
 arch=('any')
-url="https://github.com/koresent/Dot-Cursors"
+url="https://github.com/koresent/dot-cursors"
 license=('GPL3')
+options=('!debug')
 _commit=8c02c295fedcc254836959f6556ec11060fa7b87
 source=(
-    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/Dot-Cursors/archive/${_commit}.tar.gz"
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/dot-cursors/archive/${_commit}.tar.gz"
 )
 sha256sums=(
     '9636189365069814718623f7d4b099548b6d889a5f012543f6d03f7cb502e145'
 )
 
 package() {
-    cd "${srcdir}/Dot-Cursors-${_commit}"
+    cd "${srcdir}/dot-cursors-${_commit}"
     install -d "${pkgdir}/usr/share/icons"
     cp -r Linux/Dot-Black "${pkgdir}/usr/share/icons/"
     cp -r Linux/Dot-White "${pkgdir}/usr/share/icons/"
