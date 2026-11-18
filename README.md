@@ -1,6 +1,6 @@
-# koresent / pkg-repo
+# pkg-repo
 
-Personal CachyOS/Arch Linux binary package repository built with GitHub Actions and hosted on GitHub Pages.
+Personal CachyOS binary package repository built with GitHub Actions and hosted on GitHub Pages.
 
 Live package index: [cachy.koresent.dev](https://cachy.koresent.dev)
 
