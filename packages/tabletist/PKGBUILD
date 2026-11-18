@@ -1,0 +1,34 @@
+# Maintainer: koresent <https://github.com/koresent>
+
+pkgname=tabletist
+pkgver=0.7.0
+pkgrel=1
+pkgdesc="Fast, native database client for PostgreSQL, MySQL and SQLite written in Rust"
+arch=('x86_64')
+url="https://github.com/igor-alexandrov/tabletist"
+license=('MIT')
+depends=('glibc' 'gcc-libs')
+provides=('tabletist')
+conflicts=('tabletist-bin' 'tabletist-git')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/igor-alexandrov/tabletist/releases/download/v${pkgver}/tabletist-v${pkgver}-x86_64-unknown-linux-gnu.tar.gz"
+)
+sha256sums=(
+    'SKIP'
+)
+
+package() {
+    cd "${srcdir}/tabletist-v${pkgver}-x86_64-unknown-linux-gnu"
+
+    install -Dm755 tabletist "${pkgdir}/usr/bin/tabletist"
+    install -Dm644 packaging/linux/dev.tabletist.Tabletist.desktop "${pkgdir}/usr/share/applications/dev.tabletist.Tabletist.desktop"
+    ln -s dev.tabletist.Tabletist.desktop "${pkgdir}/usr/share/applications/tabletist.desktop"
+
+    install -Dm644 packaging/linux/dev.tabletist.Tabletist.svg "${pkgdir}/usr/share/icons/hicolor/scalable/apps/dev.tabletist.Tabletist.svg"
+    install -Dm644 packaging/linux/dev.tabletist.Tabletist.svg "${pkgdir}/usr/share/icons/hicolor/scalable/apps/tabletist.svg"
+
+    install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+    if [[ -f LICENSE ]]; then
+        install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
+}
