@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=StreamDeck GUI
+Comment=Wayland-native Stream Deck GUI and service
+Exec=streamdeck-gui
+Icon=streamdeck-gui
+Terminal=false
+Type=Application
+Categories=Utility;HardwareSettings;
+Keywords=streamdeck;elgato;macro;wayland;

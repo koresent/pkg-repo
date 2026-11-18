@@ -1,0 +1,30 @@
+# Maintainer: koresent <https://github.com/koresent>
+pkgname=streamdeck-gui
+pkgver=0.1.0.r1.gbb594d1
+pkgrel=1
+pkgdesc="Wayland-native Stream Deck GUI and service"
+arch=('x86_64')
+url="https://github.com/koresent/streamdeck-gui"
+license=('MIT')
+depends=('glibc' 'gcc-libs' 'hidapi')
+provides=('streamdeck-gui')
+conflicts=('streamdeck-gui-bin' 'streamdeck-gui-git')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/streamdeck-gui/releases/download/nightly/streamdeck-gui-x86_64-unknown-linux-gnu.tar.gz"
+    "streamdeck-gui.desktop"
+    "streamdeck-gui.png"
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+    'SKIP'
+)
+
+package() {
+    install -Dm755 "${srcdir}/streamdeck-gui" "${pkgdir}/usr/bin/streamdeck-gui"
+    install -Dm644 "${srcdir}/streamdeck-gui.desktop" "${pkgdir}/usr/share/applications/streamdeck-gui.desktop"
+    install -Dm644 "${srcdir}/streamdeck-gui.png" "${pkgdir}/usr/share/icons/hicolor/512x512/apps/streamdeck-gui.png"
+    if [[ -f "${srcdir}/LICENSE" ]]; then
+        install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
+}

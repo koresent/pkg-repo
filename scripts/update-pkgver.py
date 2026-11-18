@@ -13,6 +13,7 @@ REPO_MAP = {
     "kgreet": "koresent/kgreet",
     "klock": "koresent/klock",
     "korob": "koresent/korob",
+    "streamdeck-gui": "koresent/streamdeck-gui",
     "sweep": "koresent/sweep",
     "browser-toolkit": "koresent/browser-toolkit",
     "umbriel-git": "noctalia-dev/umbriel",
