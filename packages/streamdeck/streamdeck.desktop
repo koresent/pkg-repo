@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=StreamDeck GUI
-Comment=Wayland-native Stream Deck GUI and service
-Exec=streamdeck-gui
-Icon=streamdeck-gui
+Name=StreamDeck
+Comment=Wayland-native Stream Deck service and GUI
+Exec=streamdeck
+Icon=streamdeck
 Terminal=false
 Type=Application
 Categories=Utility;HardwareSettings;
