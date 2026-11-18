@@ -11,7 +11,7 @@ source=(
     "${pkgname}-${pkgver}.tar.gz::https://github.com/koresent/Dot-Cursors/archive/${_commit}.tar.gz"
 )
 sha256sums=(
-    '5da51f1af61750c0076111efcbec4e717d07c8904f8955c5d3649ddfe99cd33a'
+    '9636189365069814718623f7d4b099548b6d889a5f012543f6d03f7cb502e145'
 )
 
 package() {
