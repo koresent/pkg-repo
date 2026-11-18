@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=kclip
-pkgver=0.1.0.r5.g1c0e8a6
+pkgver=0.1.0.r7.g6a724cf
 pkgrel=1
 pkgdesc="Wayland clipboard manager with rich TTY integration and history"
 arch=('x86_64')

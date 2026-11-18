@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=korob
-pkgver=0.1.0.r2.g492353d
+pkgver=0.1.0.r3.g8cb2760
 pkgrel=1
 pkgdesc="Wayland Hotkey & Cheatsheet Overlay"
 arch=('x86_64')

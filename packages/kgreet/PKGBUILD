@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=kgreet
-pkgver=0.1.0.r11.gd86e052
+pkgver=0.1.0.r12.g0cc423a
 pkgrel=1
 pkgdesc="Wayland greetd login greeter built with GTK4 and gtk4-layer-shell"
 arch=('x86_64')
