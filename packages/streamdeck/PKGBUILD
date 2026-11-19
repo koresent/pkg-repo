@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=streamdeck
-pkgver=0.1.0.r1.gbb594d1
+pkgver=0.1.0.r5.ge116c07
 pkgrel=1
 pkgdesc="Wayland-native Stream Deck service and GUI"
 arch=('x86_64')

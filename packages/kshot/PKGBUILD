@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=kshot
-pkgver=0.1.0.r15.g4ce7bac
+pkgver=0.1.0.r16.g8ce8a81
 pkgrel=1
 pkgdesc="Native Wayland screenshot and annotation utility with interactive crop, pin, and editing suite"
 arch=('x86_64')
