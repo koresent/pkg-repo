@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=ai-file-sorter
-pkgver=1.9.2
+pkgver=2.0.0
 pkgrel=1
 pkgdesc="Content-aware file organization and renaming desktop application powered by local/remote LLMs"
 arch=('x86_64')
