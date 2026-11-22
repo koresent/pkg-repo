@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=klock
-pkgver=0.1.0.r21.g8537c00
+pkgver=0.1.0.r22.ge334123
 pkgrel=1
 pkgdesc="Wayland session lockscreen matching kgreet styling"
 arch=('x86_64')
