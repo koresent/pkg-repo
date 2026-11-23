@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=browser-toolkit
-pkgver=0.1.0.r34.gcbd511e
+pkgver=0.1.0.r36.gf71c20c
 pkgrel=1
 pkgdesc="Auditing, testing, and fixing toolkit for UserStyles and UserScripts using Zen Browser profile"
 arch=('any')
