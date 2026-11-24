@@ -1,6 +1,6 @@
 # Maintainer: koresent <https://github.com/koresent>
 pkgname=photocraft-companion
-pkgver=2.2.4
+pkgver=2.2.6
 pkgrel=1
 pkgdesc="AI-powered companion overlay and plugin ecosystem for PhotoCraft graphics editor (CUDA GPU accelerated)"
 arch=('x86_64')
