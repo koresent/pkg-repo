@@ -1,0 +1,53 @@
+# Maintainer: koresent <https://github.com/koresent>
+
+pkgname=streamtube
+pkgver=0.7.3_alpha
+pkgrel=1
+pkgdesc="Native YouTube client written in Rust with SponsorBlock, DeArrow and Return YouTube Dislike"
+arch=('x86_64')
+url="https://github.com/Avaneesh-Inamdar/Stream-Tube-Desktop"
+license=('MIT')
+depends=(
+    'gcc-libs'
+    'glibc'
+    'hicolor-icon-theme'
+    'libglvnd'
+    'libxcb'
+    'libxkbcommon'
+    'libxkbcommon-x11'
+    'mpv'
+    'vulkan-icd-loader'
+    'wayland'
+)
+optdepends=(
+    'ffmpeg: video downloads above 360p and muxing'
+    'yt-dlp: video downloading and fallback stream extraction'
+)
+provides=('streamtube' 'stream-tube' 'stream-tube-desktop')
+conflicts=('streamtube-bin' 'streamtube-git' 'stream-tube' 'stream-tube-desktop')
+options=('!debug')
+_tag="${pkgver//_/-}"
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/Avaneesh-Inamdar/Stream-Tube-Desktop/releases/download/v${_tag}/StreamTube-${_tag}-linux-x86_64.tar.gz"
+    "streamtube.svg"
+    "io.github.avaneesh_inamdar.StreamTube.metainfo.xml"
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+    'SKIP'
+)
+
+package() {
+    cd "${srcdir}/StreamTube-${_tag}-linux-x86_64"
+
+    install -Dm755 streamtube "${pkgdir}/usr/bin/streamtube"
+    install -Dm644 streamtube.desktop "${pkgdir}/usr/share/applications/streamtube.desktop"
+    install -Dm644 streamtube.png "${pkgdir}/usr/share/icons/hicolor/256x256/apps/streamtube.png"
+    install -Dm644 "${srcdir}/streamtube.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/streamtube.svg"
+    install -Dm644 "${srcdir}/io.github.avaneesh_inamdar.StreamTube.metainfo.xml" "${pkgdir}/usr/share/metainfo/io.github.avaneesh_inamdar.StreamTube.metainfo.xml"
+    install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+    if [[ -f LICENSE ]]; then
+        install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    fi
+}
