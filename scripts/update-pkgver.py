@@ -23,12 +23,12 @@ REPO_MAP = {
 }
 
 RELEASE_MAP = {
-    "adsum": "yiesko/adsum",
     "ai-file-sorter": "hyperfield/ai-file-sorter",
     "photocraft-companion": "kobaltgit/photocraft-companion",
     "shpool": "shell-pool/shpool",
     "ripdrag": "nik012003/ripdrag",
     "tabletist": "igor-alexandrov/tabletist",
+    "streamtube": "Avaneesh-Inamdar/Stream-Tube-Desktop",
 }
 
 def get_repo_commit_info(repo: str, explicit_commit: str = None) -> tuple[int, str]:
@@ -83,7 +83,7 @@ def get_latest_release(repo: str) -> str:
             if not tag and data:
                 tag = data[0]["name"]
 
-    cleaned_ver = re.sub(r"^v", "", tag.strip())
+    cleaned_ver = re.sub(r"^v", "", tag.strip()).replace("-", "_")
     return cleaned_ver
 
 def update_package(pkg: str, explicit_commit: str = None) -> bool:
