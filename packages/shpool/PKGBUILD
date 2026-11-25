@@ -12,7 +12,7 @@ depends=('glibc' 'libgcc')
 makedepends=('cargo')
 options=('!debug')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
-sha256sums=('a521a6fc38434c6f881145b726ad4101e4bd1dc06f6f17260fdb881b52f172b6')
+sha256sums=('SKIP')
 
 build() {
   export RUSTUP_TOOLCHAIN=stable

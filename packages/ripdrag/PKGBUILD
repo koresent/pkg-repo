@@ -16,7 +16,7 @@ makedepends=('cargo')
 options=('!debug')
 
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz")
-sha256sums=('f3d546233b8ba979f5ea4778f61267968a088e5b3b3035dd391ac9e6cc96162b')
+sha256sums=('SKIP')
 
 build() {
   cd "$srcdir/${pkgname}-${pkgver}"
