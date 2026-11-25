@@ -29,6 +29,7 @@ RELEASE_MAP = {
     "ripdrag": "nik012003/ripdrag",
     "tabletist": "igor-alexandrov/tabletist",
     "streamtube": "Avaneesh-Inamdar/Stream-Tube-Desktop",
+    "antigravity-unlocker": "confeden/Antigravity",
 }
 
 def get_repo_commit_info(repo: str, explicit_commit: str = None) -> tuple[int, str]:

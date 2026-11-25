@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Antigravity Unlocker
+GenericName=Antigravity Unlocker
+Comment=Unlock Antigravity 2.0 / IDE / CLI
+Comment[ru]=Разблокировать Antigravity 2.0 / IDE / CLI
+Exec=antigravity-unlocker
+Icon=antigravity-unlocker
+Terminal=false
+Categories=Utility;Development;
+StartupNotify=false
+Keywords=antigravity;unlocker;proxy;ai;

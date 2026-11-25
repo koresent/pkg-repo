@@ -1,0 +1,61 @@
+# Maintainer: koresent <https://github.com/koresent>
+
+pkgname=antigravity-unlocker
+pkgver=2.35.0
+pkgrel=1
+pkgdesc="Unlocker and local proxy for Google Antigravity 2.0 / IDE / CLI"
+arch=('x86_64')
+url="https://github.com/confeden/Antigravity"
+license=('custom:Antigravity')
+depends=(
+    'bash'
+    'gcc-libs'
+    'glibc'
+    'hicolor-icon-theme'
+    'libglvnd'
+    'libx11'
+    'libxcb'
+    'libxcursor'
+    'libxi'
+    'libxkbcommon'
+    'libxkbcommon-x11'
+    'wayland'
+)
+optdepends=(
+    'zenity: graphical error dialogs'
+    'kdialog: KDE graphical error dialogs'
+)
+provides=('antigravity-unlocker' 'ag-unlocker' 'ag_unlocker' 'antigravity-unlocker-bin')
+conflicts=('antigravity-unlocker-bin' 'ag-unlocker')
+options=('!debug')
+source=(
+    "${pkgname}-${pkgver}.tar.gz::https://github.com/confeden/Antigravity/releases/download/v${pkgver}/AG_${pkgver}_linux.tar.gz"
+    "antigravity-unlocker.desktop"
+    "antigravity-unlocker.sh"
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+    'SKIP'
+)
+
+package() {
+    cd "${srcdir}/AG_${pkgver}_linux"
+
+    # Install main binary
+    install -Dm755 ag_unlocker "${pkgdir}/usr/lib/${pkgname}/ag_unlocker"
+
+    # Install launcher script and CLI symlinks
+    install -Dm755 "${srcdir}/antigravity-unlocker.sh" "${pkgdir}/usr/bin/${pkgname}"
+    ln -s "${pkgname}" "${pkgdir}/usr/bin/ag-unlocker"
+    ln -s "${pkgname}" "${pkgdir}/usr/bin/ag_unlocker"
+
+    # Install desktop entry and icon for application launchers (e.g. Vicinae)
+    install -Dm644 "${srcdir}/antigravity-unlocker.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+    install -Dm644 icon.png "${pkgdir}/usr/share/icons/hicolor/256x256/apps/${pkgname}.png"
+    install -d "${pkgdir}/usr/share/pixmaps"
+    ln -s "/usr/share/icons/hicolor/256x256/apps/${pkgname}.png" "${pkgdir}/usr/share/pixmaps/${pkgname}.png"
+
+    # Documentation
+    install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+}
