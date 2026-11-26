@@ -2,7 +2,7 @@
 # Contributor: Noctalia Team <team@noctalia.dev>
 
 pkgname=xdg-desktop-portal-umbriel-git
-pkgver=0.1.0.r98.426d3d4
+pkgver=0.1.0.r99.04aa987
 pkgrel=1
 pkgdesc='xdg-desktop-portal backend for the Umbriel compositor'
 arch=('x86_64')
