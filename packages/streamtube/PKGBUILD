@@ -1,7 +1,7 @@
 # Maintainer: koresent <https://github.com/koresent>
 
 pkgname=streamtube
-pkgver=0.7.5_alpha
+pkgver=0.7.7_alpha
 pkgrel=1
 pkgdesc="Native YouTube client written in Rust with SponsorBlock, DeArrow and Return YouTube Dislike"
 arch=('x86_64')

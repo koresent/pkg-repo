@@ -2,7 +2,7 @@
 # Contributor: frakod <frakod@pm.me>
 
 pkgname='smooth-scroll-linux-git'
-pkgver=r115.6117c25
+pkgver=r118.eed739c
 pkgrel=1
 pkgdesc='A lightweight tool to enhance mouse wheel scrolling, adding inertia and high-resolution precision for buttery-smooth navigation on Linux desktops.'
 arch=('x86_64')
