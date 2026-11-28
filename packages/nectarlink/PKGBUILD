@@ -1,0 +1,72 @@
+# Maintainer: koresent <https://github.com/koresent>
+
+pkgname=nectarlink
+pkgver=0.1.5
+pkgrel=1
+pkgdesc="Cross-platform client for Nectar (Android multi-device integration, notification & clipboard sync)"
+arch=('x86_64')
+url="https://github.com/thtbee/nectarlink"
+license=('GPL-3.0-or-later')
+depends=(
+  'dbus'
+  'ffmpeg'
+  'gcc-libs'
+  'glibc'
+  'hicolor-icon-theme'
+  'libx11'
+  'libxcb'
+  'libxkbcommon'
+  'libxkbcommon-x11'
+  'libxtst'
+  'qt6-base'
+  'qt6-declarative'
+  'qt6-shadertools'
+  'qt6-svg'
+  'qt6-wayland'
+)
+makedepends=('cargo' 'git' 'qt6-tools')
+provides=('nectarlink' 'nectarlink-bin')
+conflicts=('nectarlink-bin')
+options=('!debug' '!lto')
+source=(
+  "${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz"
+  "tray-icon-theme.patch"
+)
+sha256sums=(
+  'SKIP'
+  'SKIP'
+)
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -Np1 -i "${srcdir}/tray-icon-theme.patch"
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --release --locked -p nectarlink-desktop
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  install -Dm755 "target/release/nectarlink-desktop" "${pkgdir}/usr/bin/nectarlink-desktop"
+
+  for qm in target/release/nectarlink_*.qm; do
+    [[ -f "${qm}" ]] && install -Dm644 "${qm}" "${pkgdir}/usr/share/nectarlink/$(basename "${qm}")"
+  done
+
+  install -Dm644 "desktop/packaging/linux/nectarlink.desktop" "${pkgdir}/usr/share/applications/nectarlink.desktop"
+  install -Dm644 "desktop/packaging/linux/org.nectarlink.desktop.metainfo.xml" "${pkgdir}/usr/share/metainfo/org.nectarlink.desktop.metainfo.xml"
+
+  if [[ -f "assets/brand/icon-512.png" ]]; then
+    install -Dm644 "assets/brand/icon-512.png" "${pkgdir}/usr/share/icons/hicolor/512x512/apps/nectarlink.png"
+    install -Dm644 "assets/brand/icon-512.png" "${pkgdir}/usr/share/icons/hicolor/256x256/apps/nectarlink.png"
+  fi
+  if [[ -f "assets/brand/icon.svg" ]]; then
+    install -Dm644 "assets/brand/icon.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/nectarlink.svg"
+  fi
+
+  install -Dm644 "LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

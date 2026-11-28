@@ -43,7 +43,8 @@ jobs:
           pacman -Syu --noconfirm --needed \
             git python uv sudo snappy \
             cmake ninja patchelf \
-            qt6-base qt6-tools \
+            qt6-base qt6-tools qt6-declarative qt6-svg qt6-shadertools qt6-wayland \
+            ffmpeg libx11 libxcb libxkbcommon libxkbcommon-x11 libxtst \
             rust \
             curl jsoncpp sqlite openssl fmt spdlog libmediainfo openblas zlib gettext \
             shaderc spirv-headers vulkan-headers vulkan-icd-loader \

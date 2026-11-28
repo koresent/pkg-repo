@@ -1,0 +1,28 @@
+--- a/desktop/app/cpp/app_helpers.cpp
++++ b/desktop/app/cpp/app_helpers.cpp
+@@ -42,6 +42,7 @@
+ #include <QtGui/QScreen>
+ #include <QtWidgets/QApplication>
+ #include <QtWidgets/QMenu>
++#include <QtCore/QStandardPaths>
+ #include <QtWidgets/QSystemTrayIcon>
+ #include <chrono>
+ #include <condition_variable>
+@@ -760,7 +761,16 @@
+         QObject::connect(menu->addAction(quitStr), &QAction::triggered, menu, []() { pushTrayAction("QUIT"); });
+ 
+         auto *tray = new QSystemTrayIcon(QCoreApplication::instance());
+-        QIcon icon = appIcon();
++        QIcon icon;
++        const QString customIcon = QStandardPaths::locate(
++            QStandardPaths::GenericDataLocation,
++            QStringLiteral("icons/Gruvbox-Plus-Dark/apps/scalable/nectarlink.svg"));
++        if (!customIcon.isEmpty())
++            icon = QIcon(customIcon);
++        if (icon.isNull())
++            icon = QIcon::fromTheme(QStringLiteral("nectarlink"));
++        if (icon.isNull())
++            icon = appIcon();
+         if (icon.isNull() && !iconPath.isEmpty())
+             icon = QIcon(iconPath);
+         tray->setIcon(icon);
